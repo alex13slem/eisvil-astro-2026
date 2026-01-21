@@ -49,10 +49,3 @@ button {
     cursor: pointer;
   }
 }
-
-@media (prefers-reduced-motion: no-preference) {
-  :has(:target) {
-    scroll-behavior: smooth;
-    scroll-padding-top: 3rem;
-  }
-}

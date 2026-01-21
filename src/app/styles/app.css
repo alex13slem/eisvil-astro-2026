@@ -78,11 +78,26 @@
   scrollbar-width: thin;
 }
 
+:root {
+  scroll-padding-top: 100px;
+  scrollbar-color: var(--color-button-secondary-50) var(--color-surface);
+}
+
 body {
   background: var(--gradient-bg-primary);
   color: var(--color-text-primary);
-  font-family: "Roboto Variable", system-ui, -apple-system, BlinkMacSystemFont,
-    "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue",
+  font-family:
+    "Roboto Variable",
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    Roboto,
+    Oxygen,
+    Ubuntu,
+    Cantarell,
+    "Open Sans",
+    "Helvetica Neue",
     sans-serif;
 }
 
