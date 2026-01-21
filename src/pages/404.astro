@@ -1,0 +1,25 @@
+---
+import { AppLayout } from "@/app/shell";
+---
+
+<AppLayout title="Страница не найдена" description="Страница не найдена">
+  <main class="container">
+    <h1>Страница не найдена</h1>
+    <p>Кажется, такой страницы не существует.</p>
+    <a href="/">На главную</a>
+  </main>
+</AppLayout>
+
+<style>
+  main {
+    min-height: 60vh;
+    display: grid;
+    place-content: center;
+    gap: 0.75rem;
+    text-align: center;
+  }
+
+  a {
+    font-weight: 600;
+  }
+</style>
