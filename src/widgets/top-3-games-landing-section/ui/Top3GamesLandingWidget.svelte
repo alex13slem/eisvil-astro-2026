@@ -1,17 +1,27 @@
 <script lang="ts">
   import { platformSlugToIcon } from "@/entities/platforms";
   import type { Top3Game } from "@/features/top-3-games";
+  import { ArrowIcon } from "@/shared/ui";
   import Icon from "@iconify/svelte";
+  import { mediaQuery } from "@sveu/browser";
   import Parallax from "parallax-js";
   import { fade, fly } from "svelte/transition";
 
   let { games }: { games: Top3Game[] } = $props();
 
+  let activeGameIndex = $state(0);
+  const activeGame = $derived((games[activeGameIndex] ?? games[0])!);
+  const activeGameSlug = $derived<string>(activeGame.slug);
+
+  const TIME_INTERVAL = 6_000;
+  let isPaused = $state(false);
+  let timerId: ReturnType<typeof setTimeout> | null = null;
+
   // Parallax scene
   let sceneRef = $state<HTMLElement>();
   $effect.pre(() => {
     let scene: Parallax;
-    if (sceneRef) {
+    if (sceneRef && $isHoverDevice) {
       scene = new Parallax(sceneRef, {
         hoverOnly: true,
       });
@@ -21,10 +31,44 @@
     };
   });
 
-  let activeGameSlug = $derived<string>(games[0].slug);
-  const activeGame = $derived(
-    games.find((game) => game.slug === activeGameSlug)!
-  );
+  const goNext = (resetTimer = false) => {
+    if (!games.length) return;
+    activeGameIndex = (activeGameIndex + 1) % games.length;
+    if (resetTimer) scheduleNext();
+  };
+
+  const goPrev = (resetTimer = false) => {
+    if (!games.length) return;
+    activeGameIndex = (activeGameIndex - 1 + games.length) % games.length;
+    if (resetTimer) scheduleNext();
+  };
+
+  const isHoverDevice = mediaQuery("(hover: hover) and (pointer: fine)");
+  $effect(() => {
+    if (timerId) {
+      clearTimeout(timerId);
+      timerId = null;
+    }
+    if (games.length < 2) return;
+    scheduleNext();
+    return () => {
+      if (timerId) clearTimeout(timerId);
+      timerId = null;
+    };
+  });
+
+  const scheduleNext = () => {
+    if (games.length < 2) return;
+    if (timerId) clearTimeout(timerId);
+    timerId = setTimeout(() => {
+      if (isPaused && $isHoverDevice) {
+        scheduleNext();
+        return;
+      }
+      goNext();
+      scheduleNext();
+    }, TIME_INTERVAL);
+  };
 </script>
 
 <section>
@@ -35,12 +79,20 @@
   {/key}
 
   <div class="container">
-    <div class="banner">
+    <div
+      class="banner"
+      role="group"
+      aria-label="Top game banner"
+      onfocusin={() => (isPaused = true)}
+      onfocusout={() => (isPaused = false)}
+      onmouseenter={() => (isPaused = true)}
+      onmouseleave={() => (isPaused = false)}
+    >
       <div class="_scene" bind:this={sceneRef}>
         {#key activeGameSlug}
           <img
             data-depth="0.3"
-            transition:fly={{ y: 100 }}
+            transition:fly={{ y: 100, duration: 1000 }}
             class="_fg"
             src={activeGame.bannerFg}
             alt=""
@@ -82,13 +134,26 @@
       </div>
     </div>
 
+    <div class="nav">
+      <button aria-label="Previous" onclick={() => goPrev(true)}>
+        <ArrowIcon direction="left" />
+      </button>
+
+      <button aria-label="Next" onclick={() => goNext(true)}>
+        <ArrowIcon direction="right" />
+      </button>
+    </div>
+
     <div class="games-list">
       <div class=""></div>
-      {#each games as game}
+      {#each games as game, index}
         <button
           class="_item"
-          data-active={game.slug === activeGameSlug}
-          onclick={() => (activeGameSlug = game.slug)}
+          data-active={index === activeGameIndex}
+          onclick={() => {
+            activeGameIndex = index;
+            scheduleNext();
+          }}
         >
           <div class="_logo">
             <img width="96" height="96" src={game.logo} alt="" />
@@ -125,10 +190,14 @@
   }
 
   .container {
+    z-index: 0;
     position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
 
-    @media (width >= 1024px) {
-      display: flex;
+    @media (width >= 1536px) {
+      flex-direction: row;
       gap: 96px;
       align-items: center;
     }
@@ -146,6 +215,30 @@
       background: var(--color-secondary);
       border-radius: 9999px;
       filter: blur(187.5px);
+    }
+  }
+
+  .nav {
+    display: flex;
+    @media (width < 1024px) {
+      z-index: 1;
+      position: absolute;
+      left: 0;
+      padding-inline: 2rem;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 100%;
+      justify-content: space-between;
+      filter: drop-shadow(0px 0px 1px var(--color-neutral-900))
+        drop-shadow(0px 0px 1px var(--color-neutral-900))
+        drop-shadow(0px 0px 1px var(--color-neutral-900));
+    }
+    @media (1024px <= width < 1536px) {
+      justify-content: end;
+      gap: 2rem;
+    }
+    @media (width >= 1536px) {
+      display: none;
     }
   }
 
@@ -208,7 +301,7 @@
       object-position: top left;
       margin-left: auto;
 
-      @media (width < 1600px) {
+      @media (width < 1536px) {
         top: calc(var(--top-offset) - 1.5rem) !important;
       }
       @media (width >= 1024px) {
@@ -283,7 +376,7 @@
     flex-direction: column;
     gap: 3rem;
 
-    @media (width < 1600px) {
+    @media (width < 1536px) {
       display: none;
     }
 
