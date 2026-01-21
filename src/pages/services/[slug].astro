@@ -52,5 +52,13 @@ const { service } = Astro.props;
     object-position: center;
     width: 100%;
     margin-bottom: 4rem;
+
+    @media (width < 1024px) {
+      aspect-ratio: 1 / 1;
+      margin-bottom: 2rem;
+    }
+    @media (width < 768px) {
+      margin-bottom: 0;
+    }
   }
 </style>
