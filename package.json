@@ -1,0 +1,39 @@
+{
+  "name": "astro",
+  "type": "module",
+  "version": "0.0.1",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "typecheck:astro": "astro check",
+    "typecheck:svelte": "svelte-check --tsconfig ./tsconfig.svelte.json",
+    "preview": "astro preview",
+    "astro": "astro",
+    "introspect:directus": "npx drizzle-kit introspect --config directus-drizzle.config.ts",
+    "introspect:directus:patch": "node ./scripts/patch-postgis-views.mjs"
+  },
+  "dependencies": {
+    "@astrojs/check": "^0.9.6",
+    "@astrojs/svelte": "^7.2.5",
+    "@fontsource-variable/roboto": "^5.2.9",
+    "@sveu/browser": "^1.0.1",
+    "astro": "^5.16.6",
+    "drizzle-orm": "^0.44.4",
+    "melt": "^0.44.0",
+    "modern-normalize": "^3.0.1",
+    "parallax-js": "^3.1.0",
+    "pg": "^8.11.5",
+    "sharp": "^0.34.5",
+    "svelte": "^5.46.1",
+    "svelte-portal": "^2.2.1",
+    "swiper": "^8.4.7",
+    "typescript": "^5.9.3"
+  },
+  "devDependencies": {
+    "@iconify/svelte": "^5.2.1",
+    "@types/parallax-js": "^3.1.3",
+    "@types/pg": "^8.16.0",
+    "drizzle-kit": "^0.31.4",
+    "svelte-check": "^4.3.5"
+  }
+}
