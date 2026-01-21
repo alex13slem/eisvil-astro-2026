@@ -1,0 +1,104 @@
+.prose {
+  color: var(--color-neutral-50);
+  font-size: 1rem;
+  line-height: 1.7;
+  max-width: 68ch;
+}
+
+.prose :where(p) {
+  margin: 0 0 1rem;
+}
+
+.prose :where(h1, h2, h3, h4) {
+  color: var(--color-neutral-50);
+  line-height: 1.2;
+  margin: 2rem 0 1rem;
+  text-wrap: balance;
+}
+
+.prose :where(h1) {
+  font-size: clamp(2rem, 3vw, 2.75rem);
+}
+
+.prose :where(h2) {
+  font-size: clamp(1.5rem, 2.2vw, 2rem);
+}
+
+.prose :where(h3) {
+  font-size: clamp(1.25rem, 1.8vw, 1.5rem);
+}
+
+.prose :where(a) {
+  color: var(--color-secondary);
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 4px;
+}
+
+.prose :where(strong) {
+  color: var(--color-neutral-50);
+  font-weight: 700;
+}
+
+.prose :where(ul, ol) {
+  margin: 0 0 1rem 1.25rem;
+  padding: 0;
+}
+
+.prose :where(li) {
+  margin: 0.4rem 0;
+}
+
+.prose :where(blockquote) {
+  margin: 1.5rem 0;
+  padding: 0.25rem 1rem;
+  border-left: 2px solid var(--color-secondary);
+  color: var(--color-neutral-200);
+}
+
+.prose :where(code) {
+  font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+  font-size: 0.95em;
+  padding: 0.15em 0.35em;
+  border-radius: 0.25rem;
+  background: color-mix(in srgb, var(--color-neutral-900), transparent 60%);
+}
+
+.prose :where(pre) {
+  margin: 1.5rem 0;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  overflow: auto;
+  background: color-mix(in srgb, var(--color-neutral-900), transparent 50%);
+}
+
+.prose :where(pre code) {
+  padding: 0;
+  background: transparent;
+}
+
+.prose :where(hr) {
+  border: 0;
+  height: 1px;
+  margin: 2rem 0;
+  background: color-mix(in srgb, var(--color-neutral-50), transparent 80%);
+}
+
+.prose :where(img, video) {
+  max-width: 100%;
+  border-radius: 0.5rem;
+}
+
+.prose :where(table) {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1.5rem 0;
+  font-size: 0.95rem;
+}
+
+.prose :where(th, td) {
+  padding: 0.6rem 0.75rem;
+  border-bottom: 1px solid
+    color-mix(in srgb, var(--color-neutral-50), transparent 80%);
+  text-align: left;
+}

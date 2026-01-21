@@ -3,7 +3,7 @@ import lbDecor from "@/shared/assets/lb-crystal.png";
 import ltDecor from "@/shared/assets/lt-crystal.png";
 import rtDecor from "@/shared/assets/rt-crystal.png";
 import { Image } from "astro:assets";
-import Card from "./ServicesLandingSectionCard.astro";
+import Card from "./SelectServiceSectionCard.astro";
 import { fetchServices } from "@/entities/services/server";
 
 const [publishingService, developmentService] = await fetchServices();

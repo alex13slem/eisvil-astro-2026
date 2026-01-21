@@ -1,0 +1,56 @@
+---
+import { AppLayout, AppMain } from "@/app/shell";
+import type { Service } from "@/entities/services";
+import { fetchServices } from "@/entities/services/server";
+import type { GetStaticPaths } from "astro";
+import { marked } from "marked";
+
+export const getStaticPaths = (async () => {
+  const [publishingService, developmentService] = await fetchServices();
+
+  return ["publishing", "development"].map((slug) => ({
+    params: { slug },
+    props: {
+      service: slug === "publishing" ? publishingService : developmentService,
+    },
+  }));
+}) satisfies GetStaticPaths;
+
+interface Props {
+  service: Service;
+}
+
+const { slug } = Astro.params;
+if (!slug) {
+  throw new Error("Missing game slug");
+}
+const title = slug === "publishing" ? "Публикация игр" : "Разработка игр";
+const { service } = Astro.props;
+---
+
+<AppLayout {title}>
+  <AppMain>
+    <div class="container">
+      <img src={service.image} alt={title} />
+      <div class="prose">
+        <Fragment set:html={marked.parse(service.body)} />
+      </div>
+    </div>
+  </AppMain>
+</AppLayout>
+
+<style>
+  .container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  img {
+    border-radius: 0.5rem;
+    aspect-ratio: 32 / 15;
+    object-fit: cover;
+    object-position: center;
+    width: 100%;
+    margin-bottom: 4rem;
+  }
+</style>
