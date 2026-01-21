@@ -1,0 +1,8 @@
+---
+import { fetchTop3Games } from "@/features/top-3-games/server";
+import Top3GamesLandingWidget from "./Top3GamesLandingWidget.svelte";
+
+const top3GamesData = await fetchTop3Games();
+---
+
+<Top3GamesLandingWidget games={top3GamesData} client:load />

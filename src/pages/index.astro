@@ -1,0 +1,32 @@
+---
+import { AppLayout } from "@/app/shell";
+import { CareerLandingSection } from "@/widgets/career-landing-section/server";
+import { GamesGalleryLandingSection } from "@/widgets/games-gallery/server";
+import { ServicesLandingSection } from "@/widgets/services-landing-section/server";
+import { Top3GamesLandingSection } from "@/widgets/top-3-games-landing-section/server";
+---
+
+<AppLayout title="Games">
+  <main>
+    <Top3GamesLandingSection />
+    <GamesGalleryLandingSection />
+    <ServicesLandingSection />
+    <CareerLandingSection />
+  </main>
+</AppLayout>
+
+<style>
+  main {
+    display: flex;
+    flex-direction: column;
+    gap: 8rem;
+
+    @media (width < 1024px) {
+      gap: 6rem;
+    }
+
+    @media (width < 768px) {
+      gap: 4rem;
+    }
+  }
+</style>

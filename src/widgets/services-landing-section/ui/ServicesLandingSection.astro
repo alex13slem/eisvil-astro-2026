@@ -1,0 +1,93 @@
+---
+import lbDecor from "@/shared/assets/lb-crystal.png";
+import ltDecor from "@/shared/assets/lt-crystal.png";
+import rtDecor from "@/shared/assets/rt-crystal.png";
+import { Image } from "astro:assets";
+import Card from "./ServicesLandingSectionCard.astro";
+import { fetchServices } from "@/entities/services/server";
+
+const [publishingService, developmentService] = await fetchServices();
+---
+
+<script>
+  import Parallax from "parallax-js";
+  new Parallax(document.querySelector("#services-section .scene")!, {
+    hoverOnly: true,
+  });
+</script>
+
+<section id="services-section">
+  <div class="container">
+    <div class="scene">
+      <Image data-depth="0.3" src={lbDecor} alt="" class="crystal _lb" />
+      <Image data-depth="0.1" src={ltDecor} alt="" class="crystal _lt" />
+      <Image data-depth="0.15" src={rtDecor} alt="" class="crystal _rt" />
+    </div>
+
+    <h2 class="section-title">Услуги</h2>
+    <div class="cards">
+      {
+        [publishingService, developmentService].map((page, idx) => (
+          <Card
+            image={page.image}
+            description={page.description}
+            title={idx === 0 ? "Публикация" : "Разработка"}
+            link={idx === 0 ? `/services/publishing` : `/services/development`}
+          />
+        ))
+      }
+    </div>
+  </div>
+</section>
+
+<style>
+  section {
+    overflow-x: clip;
+  }
+  .cards {
+    display: grid;
+    gap: 2rem;
+    @media (width >= 1024px) {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  .container {
+    position: relative;
+  }
+
+  .scene {
+    z-index: 2;
+    position: absolute;
+    inset: 0;
+
+    @media (width < 1024px) {
+      display: none;
+    }
+
+    & ._lb {
+      position: absolute !important;
+      inset: auto !important;
+      left: -60px !important;
+      bottom: -20px !important;
+    }
+
+    & ._lt {
+      position: absolute !important;
+      inset: auto !important;
+      left: 200px !important;
+      top: -40px !important;
+    }
+
+    & ._rt {
+      position: absolute !important;
+      inset: auto !important;
+      right: -40px !important;
+      top: -5px !important;
+    }
+  }
+
+  .crystal {
+    filter: drop-shadow(35px 40px 20px var(--color-neutral-800-50));
+  }
+</style>

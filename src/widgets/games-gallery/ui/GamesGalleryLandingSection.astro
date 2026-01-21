@@ -1,0 +1,14 @@
+---
+import fetchGamesGallery from "../api/fetch-games-gallery";
+import GamesGallery from "./GamesGallery.svelte";
+
+const items = await fetchGamesGallery();
+---
+
+<section>
+  <div class="container">
+    <h2 class="section-title">Игры</h2>
+  </div>
+
+  <GamesGallery {items} client:load />
+</section>

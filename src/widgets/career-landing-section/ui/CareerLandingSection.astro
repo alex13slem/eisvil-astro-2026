@@ -1,0 +1,125 @@
+---
+import { fetchVacancies } from "@/entities/vacancies/server";
+import { VacancyCardsGallery } from "@/widgets/vacancy-cards-gallery";
+
+const data = await fetchVacancies();
+---
+
+<section>
+  <div class="container">
+    <h2 class="section-title">Карьера</h2>
+    <div class="blocks">
+      <div class="start-block">
+        <div class="info">
+          <h2 class="section-title">Карьера</h2>
+          <p class="_description">
+            Мы предлагаем дружественную и профессиональную обстановку, где вы
+            сможете реализовать свой потенциал и работать над уникальными
+            проектами вместе с единомышленниками.
+          </p>
+        </div>
+
+        <button class="cta">присоедениться</button>
+      </div>
+
+      <div class="end-block">
+        <VacancyCardsGallery vacancies={data} client:load />
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  section {
+    z-index: 0;
+    position: relative;
+    overflow-x: clip;
+
+    &::after {
+      content: "";
+      z-index: -1;
+      position: absolute;
+      opacity: 0.5;
+      top: 4rem;
+      right: 0;
+      width: 150svw;
+      height: 100%;
+      transform-origin: top right;
+      rotate: -2deg;
+      background: linear-gradient(
+        to bottom,
+        var(--color-brand-300),
+        transparent
+      );
+
+      @media (width < 1024px) {
+        top: 5rem;
+        rotate: -5deg;
+      }
+
+      @media (width < 768px) {
+        display: none;
+      }
+    }
+  }
+
+  .container {
+    position: relative;
+
+    &::before {
+      width: 650px;
+      z-index: -1;
+      border-radius: 9999px;
+      aspect-ratio: 1;
+      content: "";
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      background: var(--color-secondary);
+      filter: blur(187.5px);
+      translate: -50%;
+    }
+
+    & > .section-title {
+      @media (width >= 1024px) {
+        display: none;
+      }
+    }
+  }
+
+  .blocks {
+    min-width: 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 2rem;
+
+    @media (width < 1024px) {
+      flex-direction: column-reverse;
+      align-items: center;
+    }
+  }
+
+  .start-block {
+    max-width: 422px;
+    @media (width < 1024px) {
+      max-width: 532px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+  }
+
+  .info {
+    @media (width < 1024px) {
+      .section-title {
+        display: none;
+      }
+    }
+    & ._description {
+      margin-bottom: 3rem;
+      font-weight: 300;
+      line-height: 1.35;
+    }
+  }
+</style>

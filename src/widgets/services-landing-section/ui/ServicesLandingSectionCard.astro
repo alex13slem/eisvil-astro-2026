@@ -1,0 +1,178 @@
+---
+interface Props {
+  image: string;
+  description: string;
+  title: string;
+  link: string;
+}
+
+const { image, description, title, link } = Astro.props;
+---
+
+<article class="card">
+  <div class="_inner">
+    <div class="_bg"><img src={image} alt={title} /></div>
+
+    <div class="_content">
+      <div class="_info">
+        <h3 class="_title">{title}</h3>
+        <p class="_description">{description}</p>
+      </div>
+
+      <footer>
+        <a href={link} class="cta --outline"
+          >Узнать больше
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="8"
+            viewBox="0 0 24 8"
+            fill="none"
+          >
+            <path
+              d="M20.1529 0.157252C20.3405 -0.0535119 20.6435 -0.052373 20.8294 0.160435L23.8615 3.63175C24.0473 3.84463 24.0459 4.18862 23.8587 4.39986L20.8014 7.84253C20.6138 8.05376 20.311 8.05227 20.1249 7.83935C19.9388 7.62635 19.9401 7.2825 20.1277 7.07125L22.3637 4.55157L0.476543 4.44972C0.212363 4.44848 -0.00102941 4.20435 3.73572e-06 3.90441C0.00109365 3.60446 0.216113 3.36217 0.48028 3.36334L22.3684 3.46625L20.1501 0.926417C19.9641 0.713415 19.9653 0.368504 20.1529 0.157252Z"
+              fill="currentColor"></path>
+          </svg>
+        </a>
+      </footer>
+    </div>
+  </div>
+</article>
+
+<style>
+  .card {
+    --rounded: 0.5rem;
+    position: relative;
+
+    border-radius: var(--rounded);
+
+    border: 2px solid hsla(212, 61%, 70%, 0.25);
+    transition: filter 0.3s ease-in-out;
+
+    @media (hover: hover) {
+      &:hover {
+        filter: drop-shadow(0 0 42.4px var(--color-secondary));
+        & ._bg {
+          scale: 1.05;
+          transition: scale 0.9s ease-in-out;
+        }
+        & ._title {
+          top: calc(60px + 1rem);
+        }
+        & ._description {
+          opacity: 1;
+          transition: opacity 0.9s ease-in-out;
+        }
+        & .cta {
+          opacity: 1;
+          pointer-events: all;
+          transition: opacity 0.9s ease-in-out;
+        }
+      }
+    }
+
+    @media (768px <= width < 1024px) {
+      aspect-ratio: 4 / 3;
+    }
+
+    & ._inner {
+      height: 100%;
+      z-index: 0;
+      position: relative;
+      overflow: clip;
+      border-radius: var(--rounded);
+    }
+
+    & ._bg {
+      z-index: -1;
+      position: absolute;
+      inset: 0;
+      transition: scale 0.3s ease-in-out;
+      filter: blur(10px);
+
+      img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        object-position: center;
+      }
+    }
+
+    & ._content {
+      height: 100%;
+      background: linear-gradient(
+        146deg,
+        rgba(33, 79, 132, 0.6) 4.95%,
+        rgba(26, 31, 40, 0.6) 97.73%
+      );
+
+      display: flex;
+      flex-direction: column;
+      padding: 2rem 1rem;
+
+      @media (width >= 768px) {
+        padding: 60px;
+      }
+      @media (hover: hover) {
+        padding-top: calc(60px + 37px + 2rem);
+      }
+    }
+
+    & ._info {
+      flex: 1;
+      max-width: 400px;
+      margin-inline: auto;
+      margin-bottom: 3rem;
+    }
+
+    & ._title {
+      text-transform: uppercase;
+      font-size: 1rem;
+
+      @media (width >= 768px) {
+        font-size: 2rem;
+        text-align: center;
+      }
+      @media not (hover: hover) {
+        margin-bottom: 2rem;
+        @media (width < 768px) {
+          margin-bottom: 1.5rem;
+        }
+      }
+      @media (hover: hover) {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        translate: -50% -50%;
+        transition: top 0.3s ease-in-out;
+      }
+    }
+
+    & ._description {
+      font-weight: 300;
+      line-height: 1.35;
+      font-size: 0.875rem;
+      @media (width >= 768px) {
+        font-size: 1rem;
+      }
+      @media (hover: hover) {
+        opacity: 0;
+        transition: opacity 0.3s ease-in-out;
+      }
+    }
+
+    footer {
+      margin-top: auto;
+      display: flex;
+      justify-content: center;
+
+      & .cta {
+        @media (hover: hover) {
+          pointer-events: none;
+          opacity: 0;
+          transition: opacity 0.3s ease-in-out;
+        }
+      }
+    }
+  }
+</style>

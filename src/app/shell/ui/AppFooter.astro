@@ -1,0 +1,57 @@
+---
+import bgPng from "@/shared/assets/footer-bg.png";
+import { Image } from "astro:assets";
+---
+
+<footer>
+  <div class="bg"><Image src={bgPng} alt="" /></div>
+  <div class="container">
+    <nav>
+      <a href="/terms">Пользовательское соглашение</a>
+      <a href="/privacy">Политика конфиденциальности</a>
+    </nav>
+    <div class="copyright">
+      Eisvil {new Date().getFullYear()}. Все права защищены
+    </div>
+  </div>
+</footer>
+
+<style>
+  footer {
+    position: relative;
+    margin-top: auto;
+    padding-block: 128px 48px;
+  }
+
+  .bg {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    height: auto;
+    width: 100%;
+    z-index: -1;
+
+    & img {
+      object-fit: cover;
+      object-position: center;
+    }
+  }
+
+  nav {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+
+    @media (width < 768px) {
+      flex-direction: column;
+      align-items: center;
+    }
+  }
+
+  .copyright {
+    margin-top: 2rem;
+    text-align: center;
+    opacity: 0.5;
+    user-select: none;
+  }
+</style>

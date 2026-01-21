@@ -1,0 +1,72 @@
+---
+import type { GetStaticPaths } from "astro";
+import { eq, or } from "drizzle-orm";
+import { db } from "../../db/client";
+import { games } from "../../db/schema";
+
+export const getStaticPaths: GetStaticPaths = async () => {
+  const rows = await db.select({ slug: games.slug }).from(games);
+
+  return rows
+    .map((row) => row.slug)
+    .filter(Boolean)
+    .map((slug) => ({
+      params: { slug: slug! },
+    }));
+};
+
+const { slug } = Astro.params;
+if (!slug) {
+  throw new Error("Missing game slug");
+}
+const slugParam = String(slug);
+const gameRows = await db
+  .select({
+    id: games.id,
+    slug: games.slug,
+    name: games.name,
+    description: games.description,
+    genre: games.genre,
+    developer: games.developer,
+    publisher: games.publisher,
+    releaseDate: games.releaseDate,
+  })
+  .from(games)
+  .where(or(eq(games.slug, slugParam)));
+
+const game = gameRows[0];
+if (!game) {
+  throw new Error(`Game not found for slug: ${slug}`);
+}
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="generator" content={Astro.generator} />
+    <title>{game.name ?? game.slug ?? game.id}</title>
+  </head>
+  <body>
+    <main>
+      <p><a href="/">🔙 Back to games</a></p>
+      <h1>{game.name ?? "Untitled game"}</h1>
+      <dl>
+        <dt>Slug</dt>
+        <dd>{game.slug ?? "â€”"}</dd>
+        <dt>Genre</dt>
+        <dd>{game.genre ?? "â€”"}</dd>
+        <dt>Developer</dt>
+        <dd>{game.developer ?? "â€”"}</dd>
+        <dt>Publisher</dt>
+        <dd>{game.publisher ?? "â€”"}</dd>
+        <dt>Release date</dt>
+        <dd>{game.releaseDate ?? "â€”"}</dd>
+      </dl>
+      <section>
+        <h2>Description</h2>
+        <p>{game.description ?? "No description."}</p>
+      </section>
+    </main>
+  </body>
+</html>
