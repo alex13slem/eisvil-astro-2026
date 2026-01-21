@@ -11,9 +11,12 @@ const [publishingService, developmentService] = await fetchServices();
 
 <script>
   import Parallax from "parallax-js";
-  new Parallax(document.querySelector("#services-section .scene")!, {
-    hoverOnly: true,
-  });
+  const isHoverDevice = window.matchMedia("(hover: hover) and (pointer: fine)");
+  if (isHoverDevice.matches) {
+    new Parallax(document.querySelector("#services-section .scene")!, {
+      hoverOnly: true,
+    });
+  }
 </script>
 
 <section id="services-section">
