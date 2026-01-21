@@ -1,0 +1,18 @@
+services:
+  astro:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        DIRECTUS_URL: ${DIRECTUS_URL}
+        DIRECTUS_DATABASE_URL: ${DIRECTUS_DATABASE_URL}
+      network: eisvil
+    ports:
+      - "4321:80"
+    networks:
+      - eisvil
+
+networks:
+  eisvil:
+    external: true
+    name: eisvil-shared
