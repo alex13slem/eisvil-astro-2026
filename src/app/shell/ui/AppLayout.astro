@@ -4,7 +4,7 @@ import "@fontsource-variable/roboto";
 import "modern-normalize/modern-normalize.css";
 import "../../styles/index.css";
 import AppFooter from "./AppFooter.astro";
-import AppHeader from "./AppHeader.astro";
+import AppHeader from "./AppHeader.svelte";
 
 interface Props {
   title: string;
@@ -26,7 +26,7 @@ const { title, description } = Astro.props;
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
   </head>
   <body>
-    <AppHeader />
+    <AppHeader client:load />
     <slot />
     <AppFooter />
   </body>
