@@ -1,5 +1,5 @@
 ---
-import { AppLayout } from "@/app/shell";
+import { AppLayout, AppMain } from "@/app/shell";
 import { CareerLandingSection } from "@/widgets/career-landing-section/server";
 import { GamesGalleryLandingSection } from "@/widgets/games-gallery/server";
 import { ServicesLandingSection } from "@/widgets/services-landing-section/server";
@@ -7,12 +7,12 @@ import { Top3GamesLandingSection } from "@/widgets/top-3-games-landing-section/s
 ---
 
 <AppLayout title="Games">
-  <main>
+  <AppMain>
     <Top3GamesLandingSection />
     <GamesGalleryLandingSection />
     <ServicesLandingSection />
     <CareerLandingSection />
-  </main>
+  </AppMain>
 </AppLayout>
 
 <style>
