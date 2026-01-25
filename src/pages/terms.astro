@@ -1,0 +1,13 @@
+﻿---
+import { AppLayout, AppMain } from "@/app/shell";
+import { fetchTermsMD } from "@/features/terms-and-privacy/server";
+import { MDSection } from "@/shared/ui";
+
+const md = await fetchTermsMD();
+---
+
+<AppLayout title="Пользовательское соглашение">
+  <AppMain>
+    <MDSection {md} />
+  </AppMain>
+</AppLayout>
