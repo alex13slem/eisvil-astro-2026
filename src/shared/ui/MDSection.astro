@@ -1,0 +1,47 @@
+---
+import { marked } from "marked";
+
+interface Props {
+  md: string;
+  img?: {
+    src: string;
+    alt: string;
+  };
+}
+
+const { md, img } = Astro.props;
+const html = marked.parse(md);
+---
+
+<section>
+  <div class="container">
+    {img && <img src={img.src} alt={img.alt} />}
+    <div class="prose">
+      <Fragment set:html={html} />
+    </div>
+  </div>
+</section>
+
+<style>
+  .container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  img {
+    border-radius: 0.5rem;
+    aspect-ratio: 32 / 15;
+    object-fit: cover;
+    object-position: center;
+    width: 100%;
+    margin-bottom: 4rem;
+
+    @media (width < 1024px) {
+      aspect-ratio: 1 / 1;
+      margin-bottom: 2rem;
+    }
+    @media (width < 768px) {
+      margin-bottom: 0;
+    }
+  }
+</style>

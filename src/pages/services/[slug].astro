@@ -2,8 +2,8 @@
 import { AppLayout, AppMain } from "@/app/shell";
 import type { Service } from "@/entities/services";
 import { fetchServices } from "@/entities/services/server";
+import { MDSection } from "@/shared/ui";
 import type { GetStaticPaths } from "astro";
-import { marked } from "marked";
 
 export const getStaticPaths = (async () => {
   const [publishingService, developmentService] = await fetchServices();
@@ -30,35 +30,6 @@ const { service } = Astro.props;
 
 <AppLayout {title}>
   <AppMain>
-    <div class="container">
-      <img src={service.image} alt={title} />
-      <div class="prose">
-        <Fragment set:html={marked.parse(service.body)} />
-      </div>
-    </div>
+    <MDSection md={service.body} img={{ src: service.image, alt: title }} />
   </AppMain>
 </AppLayout>
-
-<style>
-  .container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-  img {
-    border-radius: 0.5rem;
-    aspect-ratio: 32 / 15;
-    object-fit: cover;
-    object-position: center;
-    width: 100%;
-    margin-bottom: 4rem;
-
-    @media (width < 1024px) {
-      aspect-ratio: 1 / 1;
-      margin-bottom: 2rem;
-    }
-    @media (width < 768px) {
-      margin-bottom: 0;
-    }
-  }
-</style>
