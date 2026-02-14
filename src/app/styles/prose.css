@@ -52,8 +52,8 @@
 .prose :where(blockquote) {
   margin: 1.5rem 0;
   padding: 0.25rem 1rem;
-  border-left: 2px solid var(--color-secondary);
-  color: var(--color-neutral-200);
+  border-left: 2px solid var(--color-neutral-50);
+  color: var(--color-neutral-50);
 }
 
 .prose :where(code) {

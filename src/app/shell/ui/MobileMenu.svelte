@@ -55,7 +55,7 @@
         border-radius: 9999px;
         aspect-ratio: 1 / 1;
         background: var(--color-primary);
-        filter: blur(2.25rem);
+        filter: blur(8rem);
       }
       &[data-open] {
         pointer-events: all;

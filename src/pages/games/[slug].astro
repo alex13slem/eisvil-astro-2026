@@ -1,72 +1,87 @@
 ---
+import { AppLayout, AppMain } from "@/app/shell";
+import { type Game } from "@/entities/games";
+import { fetchGames } from "@/entities/games/server";
+import { GameDetailSection } from "@/widgets/game-detail-section/server";
+import {
+  fetchGameFeaturesSectionData,
+  GameFeaturesSection,
+  type GameFeaturesSectionData,
+} from "@/widgets/game-features-section/server";
+import type { GameTeamMember } from "@/widgets/game-team-section";
+import {
+  fetchGameTeamMembers,
+  GameTeamSection,
+} from "@/widgets/game-team-section/server";
+import { GameplayGallerySection } from "@/widgets/gameplay-gallery-section/server";
 import type { GetStaticPaths } from "astro";
-import { eq, or } from "drizzle-orm";
-import { db } from "../../db/client";
-import { games } from "../../db/schema";
 
 export const getStaticPaths: GetStaticPaths = async () => {
-  const rows = await db.select({ slug: games.slug }).from(games);
+  const games = await fetchGames();
 
-  return rows
-    .map((row) => row.slug)
-    .filter(Boolean)
-    .map((slug) => ({
-      params: { slug: slug! },
-    }));
+  const featureSectionDataMap = new Map<string, GameFeaturesSectionData>();
+  for (const game of games) {
+    const featureSectionData = await fetchGameFeaturesSectionData(game.id);
+    featureSectionDataMap.set(game.id, featureSectionData);
+  }
+
+  const teamTeamMembersMap = new Map<string, GameTeamMember[]>();
+  for (const game of games) {
+    const teamMembers = await fetchGameTeamMembers(game.id);
+    teamTeamMembersMap.set(game.id, teamMembers);
+  }
+
+  return games.map((game) => {
+    return {
+      params: { slug: game.slug },
+      props: {
+        game,
+        featureSectionData: featureSectionDataMap.get(game.id)!,
+        teamMembers: teamTeamMembersMap.get(game.id)!,
+      },
+    };
+  });
 };
 
-const { slug } = Astro.params;
-if (!slug) {
-  throw new Error("Missing game slug");
+interface Props {
+  game: Game;
+  featureSectionData: GameFeaturesSectionData;
+  teamMembers: GameTeamMember[];
 }
-const slugParam = String(slug);
-const gameRows = await db
-  .select({
-    id: games.id,
-    slug: games.slug,
-    name: games.name,
-    description: games.description,
-    genre: games.genre,
-    developer: games.developer,
-    publisher: games.publisher,
-    releaseDate: games.releaseDate,
-  })
-  .from(games)
-  .where(or(eq(games.slug, slugParam)));
 
-const game = gameRows[0];
-if (!game) {
-  throw new Error(`Game not found for slug: ${slug}`);
-}
+const { game, featureSectionData, teamMembers } = Astro.props;
 ---
 
-<html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width" />
-    <meta name="generator" content={Astro.generator} />
-    <title>{game.name ?? game.slug ?? game.id}</title>
-  </head>
-  <body>
-    <main>
-      <p><a href="/">🔙 Back to games</a></p>
-      <h1>{game.name ?? "Untitled game"}</h1>
-      <dl>
-        <dt>Slug</dt>
-        <dd>{game.slug ?? "â€”"}</dd>
-        <dt>Genre</dt>
-        <dd>{game.genre ?? "â€”"}</dd>
-        <dt>Developer</dt>
-        <dd>{game.developer ?? "â€”"}</dd>
-        <dt>Publisher</dt>
-        <dd>{game.publisher ?? "â€”"}</dd>
-        <dt>Release date</dt>
-        <dd>{game.releaseDate ?? "â€”"}</dd>
-      </dl>
-      <section>
-        <h2>Description</h2>
-        <p>{game.description ?? "No description."}</p>
-      </section>
-    </main>
-  </body>
-</html>
+<AppLayout title={game.name}>
+  <AppMain>
+    <GameDetailSection {game} />
+    <GameplayGallerySection class="gameplay-gallery" gameId={game.id} />
+    {
+      !!featureSectionData.features.length && (
+        <GameFeaturesSection class="section" {...featureSectionData} />
+      )
+    }
+    {
+      !!teamMembers.length && (
+        <GameTeamSection class="section" members={teamMembers} />
+      )
+    }
+  </AppMain>
+</AppLayout>
+
+<style>
+  .gameplay-gallery {
+    margin-top: 2rem;
+
+    @media (width < 1440px) {
+      margin-top: 1.5rem;
+    }
+    @media (width < 768px) {
+      margin-top: 0.5rem;
+    }
+  }
+
+  .section {
+    margin-top: 96px;
+  }
+</style>

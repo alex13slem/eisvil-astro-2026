@@ -1,6 +1,6 @@
 ---
 import { fetchVacancies } from "@/entities/vacancies/server";
-import { VacancyCardsGallery } from "@/widgets/vacancy-cards-gallery";
+import { LandingVacancyCardsGallery } from "@/widgets/landing-vacancy-cards-gallery";
 
 const data = await fetchVacancies();
 ---
@@ -23,7 +23,7 @@ const data = await fetchVacancies();
       </div>
 
       <div class="end-block">
-        <VacancyCardsGallery vacancies={data} client:load />
+        <LandingVacancyCardsGallery vacancies={data} client:load />
       </div>
     </div>
   </div>

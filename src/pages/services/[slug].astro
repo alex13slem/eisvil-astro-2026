@@ -1,14 +1,23 @@
 ---
 import { AppLayout, AppMain } from "@/app/shell";
-import type { Service } from "@/entities/services";
+import {
+  SERVICES_SLUGS,
+  type Service,
+  type ServicesSlug,
+} from "@/entities/services";
 import { fetchServices } from "@/entities/services/server";
+import { DevelopmentOrderCTATrigger } from "@/features/development-order-cta";
+import { PublishingCTATrigger } from "@/features/publishing-cta";
 import { MDSection } from "@/shared/ui";
 import type { GetStaticPaths } from "astro";
 
+interface Props {
+  service: Service;
+}
+
 export const getStaticPaths = (async () => {
   const [publishingService, developmentService] = await fetchServices();
-
-  return ["publishing", "development"].map((slug) => ({
+  return SERVICES_SLUGS.map((slug) => ({
     params: { slug },
     props: {
       service: slug === "publishing" ? publishingService : developmentService,
@@ -16,14 +25,8 @@ export const getStaticPaths = (async () => {
   }));
 }) satisfies GetStaticPaths;
 
-interface Props {
-  service: Service;
-}
+const { slug } = Astro.params as { slug: ServicesSlug };
 
-const { slug } = Astro.params;
-if (!slug) {
-  throw new Error("Missing game slug");
-}
 const title = slug === "publishing" ? "Публикация игр" : "Разработка игр";
 const { service } = Astro.props;
 ---
@@ -31,5 +34,24 @@ const { service } = Astro.props;
 <AppLayout {title}>
   <AppMain>
     <MDSection md={service.body} img={{ src: service.image, alt: title }} />
+    <section id="cta-section" class="container">
+      <div class="prose">
+        {slug === "development" && <DevelopmentOrderCTATrigger client:load />}
+        {slug === "publishing" && <PublishingCTATrigger client:load />}
+      </div>
+    </section>
   </AppMain>
 </AppLayout>
+
+<style>
+  #cta-section {
+    position: relative;
+    z-index: 2;
+    margin-top: 4rem;
+    .prose {
+      margin-inline: auto;
+      display: flex;
+      justify-content: center;
+    }
+  }
+</style>

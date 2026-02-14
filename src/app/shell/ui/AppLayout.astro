@@ -3,6 +3,7 @@ import "@fontsource-variable/roboto";
 
 import "modern-normalize/modern-normalize.css";
 import "../../styles/index.css";
+import { ClientProvider } from "../providers";
 import AppFooter from "./AppFooter.astro";
 import AppHeader from "./AppHeader.svelte";
 
@@ -29,6 +30,7 @@ const { title, description } = Astro.props;
     <AppHeader client:load />
     <slot />
     <AppFooter />
+    <ClientProvider client:load />
   </body>
 </html>
 

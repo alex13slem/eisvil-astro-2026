@@ -1,5 +1,8 @@
 <script lang="ts">
-  import { platformSlugToIcon } from "@/entities/platforms";
+  import {
+    PlatformsLinksBlock,
+    platformSlugToIcon,
+  } from "@/entities/platforms";
   import type { Top3Game } from "@/features/top-3-games";
   import { ArrowIcon } from "@/shared/ui";
   import Icon from "@iconify/svelte";
@@ -111,23 +114,7 @@
         <p class="_description">{activeGame.bannerDescription}</p>
         <a class="cta" href={`/games/${activeGame.slug}`}>узнать больше</a>
         {#if !!activeGame.platforms.length}
-          <div class="_platforms">
-            {#each activeGame.platforms as platform}
-              {@const { type, icon } = platformSlugToIcon[platform.slug]}
-              <a
-                title={platform.name}
-                href={platform.link}
-                target="_blank"
-                class="_platform"
-              >
-                {#if type === "svg"}
-                  {@html icon}
-                {:else if type === "iconify"}
-                  <Icon {icon} />
-                {/if}
-              </a>
-            {/each}
-          </div>
+          <PlatformsLinksBlock platforms={activeGame.platforms} />
         {:else}
           <div class="_platforms-ph"></div>
         {/if}
@@ -196,7 +183,7 @@
     flex-direction: column;
     gap: 1rem;
 
-    @media (width >= 1536px) {
+    @media (width >= 1440px) {
       flex-direction: row;
       gap: 96px;
       align-items: center;
@@ -233,11 +220,11 @@
         drop-shadow(0px 0px 1px var(--color-neutral-900))
         drop-shadow(0px 0px 1px var(--color-neutral-900));
     }
-    @media (1024px <= width < 1536px) {
+    @media (1024px <= width < 1440px) {
       justify-content: end;
       gap: 2rem;
     }
-    @media (width >= 1536px) {
+    @media (width >= 1440px) {
       display: none;
     }
   }
@@ -301,7 +288,7 @@
       object-position: top left;
       margin-left: auto;
 
-      @media (width < 1536px) {
+      @media (width < 1440px) {
         top: calc(var(--top-offset) - 1.5rem) !important;
       }
       @media (width >= 1024px) {
@@ -346,27 +333,12 @@
         } */
     }
 
-    ._platforms {
-      display: flex;
-      gap: 0.5rem;
-      padding: 6px 1rem;
-      border-radius: 9999px;
-      border: thin solid var(--color-neutral-50);
-      background: color-mix(in srgb, var(--color-neutral-900), transparent 90%);
-      backdrop-filter: blur(4px);
-    }
-
     ._platforms-ph {
       height: 34px;
 
       @media (width < 1024px) {
         display: none;
       }
-    }
-
-    ._platform {
-      color: var(--color-neutral-50);
-      font-size: 1.25rem;
     }
   }
 
@@ -376,7 +348,7 @@
     flex-direction: column;
     gap: 3rem;
 
-    @media (width < 1536px) {
+    @media (width < 1440px) {
       display: none;
     }
 

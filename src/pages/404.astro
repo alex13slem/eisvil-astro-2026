@@ -1,10 +1,12 @@
 ---
 import { AppLayout, AppMain } from "@/app/shell";
+import decor from "@/shared/assets/404.png";
+import { Image } from "astro:assets";
 ---
 
 <AppLayout title="Страница не найдена" description="Страница не найдена">
   <AppMain class="container">
-    <h1>Страница не найдена</h1>
+    <Image class="decor" src={decor} alt="" />
     <p>Кажется, такой страницы не существует.</p>
     <a href="/">На главную</a>
   </AppMain>
@@ -21,5 +23,9 @@ import { AppLayout, AppMain } from "@/app/shell";
 
   a {
     font-weight: 600;
+  }
+
+  .decor {
+    object-fit: contain;
   }
 </style>

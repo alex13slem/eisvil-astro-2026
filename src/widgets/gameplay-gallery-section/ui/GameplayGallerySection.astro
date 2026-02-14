@@ -1,0 +1,24 @@
+---
+import type { HTMLAttributes } from "astro/types";
+import fetchGameplayGallery from "../api/fetch-gameplay-gallery";
+import GameplayGallery from "./GameplayGallery.svelte";
+
+interface Props extends HTMLAttributes<"section"> {
+  gameId: string;
+}
+
+const { gameId, ...props } = Astro.props;
+
+const gallery = await fetchGameplayGallery(gameId);
+---
+
+<section {...props}>
+  <GameplayGallery images={gallery} client:load />
+</section>
+
+<style>
+  section {
+    z-index: 1;
+    position: relative;
+  }
+</style>

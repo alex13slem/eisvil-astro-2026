@@ -42,7 +42,7 @@
       breakpoints={{
         768: { spaceBetween: 24 },
         1024: { slidesPerView: 2 },
-        1441: { slidesPerView: 2.5 },
+        1440: { slidesPerView: 2.5 },
       }}
     >
       {#each items as item (item.slug)}
@@ -106,7 +106,7 @@
       transition: opacity 0.3s ease-in-out;
       pointer-events: none;
 
-      @media (width < 768px) or (1024px < width <= 1536px) {
+      @media (width < 768px) or (1024px < width <= 1440px) {
         display: none;
       }
     }

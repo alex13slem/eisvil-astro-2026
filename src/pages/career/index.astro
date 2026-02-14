@@ -1,0 +1,85 @@
+---
+import { AppLayout, AppMain } from "@/app/shell";
+import { fetchVacancies } from "@/entities/vacancies/server";
+import bg from "@/shared/assets/career-bg.png";
+import { DetailVacancyCardsGallery } from "@/widgets/detail-vacancy-cards-gallery";
+import { Image } from "astro:assets";
+
+const data = await fetchVacancies();
+---
+
+<AppLayout title="Карьера">
+  <AppMain class="main">
+    <div class="bg">
+      <Image src={bg} alt="" />
+    </div>
+    <section class="hero container">
+      <h1>КАРЬЕРА В EISVIL</h1>
+      <p>
+        <strong>
+          Присоединяйтесь к нам и станьте частью команды, которая создает самые
+          увлекательные игры!
+        </strong>
+      </p>
+      <p class="description">
+        Выполните одно из следующих тестовых заданий и заполни анкету, на любую
+        из вакансий чтобы подать заявку в команду EISVIL. Мы всегда ищем новые
+        таланты!
+      </p>
+    </section>
+
+    <section class="vacancies">
+      <div class="container">
+        <DetailVacancyCardsGallery client:load vacancies={data} />
+      </div>
+    </section>
+  </AppMain>
+</AppLayout>
+
+<style>
+  .bg {
+    opacity: 0.05;
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    z-index: -1;
+
+    img {
+      height: 100%;
+      width: 100%;
+      object-fit: cover;
+      object-position: center;
+    }
+  }
+
+  section.hero {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    padding-block: 72px 96px;
+
+    h1 {
+      font-size: 3rem;
+      font-weight: 700;
+      line-height: 1;
+    }
+
+    .description {
+      font-weight: 300;
+      max-width: 510px;
+    }
+  }
+
+  section.vacancies {
+    position: relative;
+    z-index: 2;
+
+    .container {
+      @media (width < 768px) {
+        padding: 0;
+      }
+    }
+  }
+</style>

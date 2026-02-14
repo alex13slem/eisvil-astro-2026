@@ -1,0 +1,110 @@
+---
+import type { HTMLAttributes } from "astro/types";
+import { type GameFeaturesSectionData } from "../api/fetch-game-features-section-data";
+import GameFeatures from "./GameFeatures.svelte";
+
+interface Props extends HTMLAttributes<"section">, GameFeaturesSectionData {}
+
+const { features, decorBottom, decorLeft, decorRight, decorTop, ...props } =
+  Astro.props;
+---
+
+<script>
+  import Parallax from "parallax-js";
+  const isHoverDevice = window.matchMedia("(hover: hover) and (pointer: fine)");
+  if (isHoverDevice.matches) {
+    new Parallax(document.querySelector("#game-features-section .scene")!, {
+      hoverOnly: true,
+    });
+  }
+</script>
+
+<section id="game-features-section" {...props}>
+  <div class="container">
+    <h2 class="section-title">ОСОБЕННОСТИ ИГРЫ</h2>
+
+    <div class="inner">
+      {
+        decorBottom && decorLeft && decorRight && decorTop && (
+          <div class="scene">
+            <img class="decor _l" data-depth="0.3" src={decorLeft} alt="" />
+            <img class="decor _t" data-depth="0.15" src={decorTop} alt="" />
+            <img class="decor _r" data-depth="0.3" src={decorRight} alt="" />
+            <img class="decor _b" data-depth="0.15" src={decorBottom} alt="" />
+          </div>
+        )
+      }
+
+      <GameFeatures client:load {features} />
+    </div>
+  </div>
+</section>
+
+<style>
+  section {
+    position: relative;
+    z-index: 1;
+    overflow-x: clip;
+
+    &::after {
+      content: "";
+      z-index: -2;
+      position: absolute;
+
+      top: 50%;
+      left: 40%;
+      translate: -50% -50%;
+      height: 590px;
+      aspect-ratio: 1 / 1;
+      background: var(--color-brand-100);
+      border-radius: 9999px;
+      filter: blur(100px);
+
+      @media (width < 1024px) {
+        display: none;
+      }
+    }
+  }
+
+  .inner {
+    position: relative;
+  }
+
+  .scene {
+    z-index: 2;
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+
+    @media (width < 1024px) {
+      display: none;
+    }
+  }
+
+  .decor {
+    position: absolute !important;
+    inset: auto !important;
+    filter: drop-shadow(35px 40px 20px var(--color-neutral-800-50));
+
+    &._l {
+      bottom: -24px !important;
+      left: 0 !important;
+      translate: -50% 0;
+    }
+    &._t {
+      top: 0 !important;
+      left: 30% !important;
+      translate: 0 -50%;
+    }
+    &._r {
+      right: 0 !important;
+      top: -24px !important;
+      translate: 50%;
+    }
+    &._b {
+      bottom: 0 !important;
+      left: 40% !important;
+      translate: 0 50%;
+    }
+  }
+</style>

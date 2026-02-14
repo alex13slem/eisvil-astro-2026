@@ -1,0 +1,26 @@
+---
+import type { HTMLAttributes } from "astro/types";
+import type { GameTeamMember } from "../model/schema";
+import GameTeamGallery from "./GameTeamGallery.svelte";
+
+interface Props extends HTMLAttributes<"section"> {
+  members: GameTeamMember[];
+}
+
+const { members, ...props } = Astro.props;
+---
+
+<section {...props}>
+  <div class="container">
+    <h2 class="section-title">Команда</h2>
+  </div>
+
+  <GameTeamGallery client:load {members} />
+</section>
+
+<style>
+  section {
+    z-index: 1;
+    position: relative;
+  }
+</style>

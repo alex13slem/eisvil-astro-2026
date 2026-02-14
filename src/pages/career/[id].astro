@@ -1,0 +1,46 @@
+---
+import { AppLayout, AppMain } from "@/app/shell";
+import type { Vacancy } from "@/entities/vacancies";
+import { fetchVacancies } from "@/entities/vacancies/server";
+import { CareerCTATrigger } from "@/features/career-cta";
+import { MDSection } from "@/shared/ui";
+import type { GetStaticPaths } from "astro";
+
+export const getStaticPaths = (async () => {
+  const vacancies = await fetchVacancies();
+  return vacancies.map((v) => ({
+    params: { id: v.id },
+    props: { vacancy: v },
+  }));
+}) satisfies GetStaticPaths;
+
+interface Props {
+  vacancy: Vacancy;
+}
+
+const { vacancy } = Astro.props;
+---
+
+<AppLayout title={vacancy.positionName}>
+  <AppMain>
+    <MDSection md={vacancy.body} />
+    <section id="cta-section" class="container">
+      <div class="prose">
+        <CareerCTATrigger testLink={vacancy.formLink} client:load />
+      </div>
+    </section>
+  </AppMain>
+</AppLayout>
+
+<style>
+  #cta-section {
+    position: relative;
+    z-index: 2;
+    margin-top: 4rem;
+    .prose {
+      margin-inline: auto;
+      display: flex;
+      justify-content: center;
+    }
+  }
+</style>

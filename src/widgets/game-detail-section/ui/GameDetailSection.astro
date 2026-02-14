@@ -1,0 +1,281 @@
+---
+import { GameSharedBlock, type Game } from "@/entities/games";
+import { PlatformsLinksBlock } from "@/entities/platforms";
+
+interface Props {
+  game: Game;
+}
+
+const { game } = Astro.props;
+
+const table = [
+  { label: "Жанр:", value: game.genre },
+  { label: "Разработчик:", value: game.developer },
+  { label: "Издатель:", value: game.publisher },
+  { label: "Дата выхода:", value: game.releaseDate ?? "---" },
+];
+---
+
+<section>
+  <div class="bg">
+    <img src={game.bannerBg} alt="" />
+  </div>
+  <div class="container">
+    <div class="hero-sect">
+      <div class="_logo">
+        <img src={game.logo} alt={game.name} />
+      </div>
+      <div class="_links">
+        {
+          game.siteUrl && (
+            <a class="cta" target="_blank" href={game.siteUrl}>
+              Играть
+            </a>
+          )
+        }
+        {
+          !!game.platforms.length && (
+            <PlatformsLinksBlock client:load platforms={game.platforms} />
+          )
+        }
+      </div>
+    </div>
+    <div class="main-sect">
+      <div
+        class="banner"
+        style={{
+          backgroundImage: `url(${game.fullBanner})`,
+        }}
+      >
+      </div>
+      <div class="info">
+        <h1>{game.name}</h1>
+        <p class="_description">
+          {game.description}
+        </p>
+
+        <div class="info-table">
+          {
+            table.map(({ label, value }) => (
+              <div class="_row">
+                <p class="_label">{label}</p>
+                <p class="_value">{value}</p>
+              </div>
+            ))
+          }
+        </div>
+
+        <div class="shared-block">
+          <GameSharedBlock
+            client:load
+            name={game.name}
+            slug={game.slug}
+            description={game.description}
+          />
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  section {
+    z-index: 0;
+    position: relative;
+
+    &::before {
+      content: "";
+      z-index: -1;
+      position: absolute;
+      inset: 0;
+      top: -100px;
+      bottom: auto;
+      height: 20rem;
+      width: 100%;
+      border-radius: 100%;
+      background: var(--color-neutral-800);
+      translate: 0 -50%;
+      filter: blur(100px);
+
+      @media (width < 768px) {
+        display: none;
+      }
+    }
+
+    &::after {
+      content: "";
+      z-index: -1;
+      position: absolute;
+      top: 10%;
+      left: 0;
+      right: 0;
+      height: 180%;
+      width: 100%;
+      background: linear-gradient(
+        180deg,
+        transparent 0%,
+        var(--color-neutral-400) 45%,
+        var(--color-neutral-400) 55%,
+        transparent 100%
+      );
+    }
+  }
+
+  .bg {
+    z-index: -2;
+    position: absolute;
+    inset: 0;
+    top: -100px;
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+  }
+
+  .hero-sect {
+    height: 560px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 80px;
+
+    ._logo {
+      height: 148px;
+      width: auto;
+      img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+      }
+    }
+
+    ._links {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1rem;
+    }
+  }
+
+  .main-sect {
+    position: relative;
+    display: flex;
+    flex-direction: column-reverse;
+    gap: 2rem;
+
+    &::after {
+      content: "";
+      z-index: -2;
+      position: absolute;
+
+      top: 0;
+      right: 230px;
+      translate: 0 -40%;
+      width: 420px;
+      aspect-ratio: 1 / 1;
+      background: var(--color-brand-100);
+      border-radius: 9999px;
+      filter: blur(100px);
+
+      @media (width < 1024px) {
+        display: none;
+      }
+    }
+
+    @media (width >= 1024px) {
+      display: grid;
+      grid-template-columns: 1fr auto;
+    }
+  }
+
+  .banner {
+    flex: 1;
+    border-radius: 0.5rem;
+    overflow: clip;
+    height: 100%;
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+
+    @media (width < 1024px) {
+      aspect-ratio: 4 / 3;
+    }
+  }
+
+  .info {
+    z-index: 0;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+    padding: 40px;
+    border-radius: 0.5rem;
+
+    background: linear-gradient(
+      145.79deg,
+      rgba(33, 79, 132, 0.6) 4.95%,
+      rgba(26, 31, 40, 0.6) 97.73%
+    );
+    backdrop-filter: blur(19px);
+    box-shadow:
+      1px 1px 0px 0px hsla(175, 100%, 92%, 0.25) inset,
+      -1px -1px 0px 0px hsla(232, 39%, 11%, 0.28) inset;
+
+    @media (width >= 1024px) {
+      max-width: 424px;
+    }
+    @media (width < 1024px) {
+      align-items: center;
+    }
+    @media (width < 768px) {
+      padding: 28px;
+      gap: 28px;
+    }
+
+    h1 {
+      font-size: 2rem;
+      font-weight: 700;
+    }
+    ._description {
+      max-width: 496px;
+      width: 100%;
+      font-weight: 300;
+      @media (width >= 1024px) {
+        height: 145px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: -webkit-box;
+        -webkit-line-clamp: 8;
+        -webkit-box-orient: vertical;
+      }
+    }
+  }
+
+  .info-table {
+    width: 100%;
+    max-width: 386px;
+    margin-inline: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+
+    ._row {
+      display: flex;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+    ._label {
+      font-weight: 700;
+    }
+    ._value {
+      font-weight: 300;
+    }
+  }
+
+  .shared-block {
+    display: flex;
+    justify-content: center;
+  }
+</style>

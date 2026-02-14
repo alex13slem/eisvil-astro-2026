@@ -67,8 +67,8 @@
     --container-max: 1280px;
   }
 
-  @media (min-width: 1536px) {
-    --container-max: 1536px;
+  @media (min-width: 1440px) {
+    --container-max: 1440px;
   }
 }
 
@@ -80,7 +80,14 @@
 
 :root {
   scroll-padding-top: 100px;
-  scrollbar-color: var(--color-button-secondary-50) var(--color-surface);
+  scrollbar-color: var(--color-button-primary-100) var(--color-surface);
+}
+
+* {
+  &:focus-visible {
+    outline: none;
+    filter: drop-shadow(0 0 4px var(--color-button-primary-100));
+  }
 }
 
 body {
@@ -99,6 +106,7 @@ body {
     "Open Sans",
     "Helvetica Neue",
     sans-serif;
+  overflow: clip;
 }
 
 .cta {
@@ -107,6 +115,7 @@ body {
   align-items: center;
   justify-content: center;
   z-index: 0;
+  text-transform: lowercase;
 
   padding: 0.8em;
   border: 0;
@@ -184,4 +193,48 @@ body {
   line-height: normal;
   text-transform: uppercase;
   margin-bottom: 1.75rem;
+}
+
+.checkbox {
+  --checkbox-size: 1.5rem;
+
+  flex-shrink: 0;
+  appearance: none;
+  -webkit-appearance: none;
+  width: var(--checkbox-size);
+  height: var(--checkbox-size);
+  border-radius: 0.5rem;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  background: var(--color-neutral-50);
+  display: inline-grid;
+  place-items: center;
+  cursor: pointer;
+  position: relative;
+  transition:
+    background-color 0.2s ease,
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+
+  &::after {
+    content: "";
+    width: 18px;
+    height: 18px;
+    background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'%3E%3Cpath fill='%23000' d='M9 16.17L5.53 12.7a.996.996 0 1 0-1.41 1.41l4.18 4.18c.39.39 1.02.39 1.41 0L20.29 7.71a.996.996 0 1 0-1.41-1.41z'/%3E%3C/svg%3E")
+      center / contain no-repeat;
+    opacity: 0;
+    transform: scale(0.8);
+    transition:
+      opacity 0.15s ease,
+      transform 0.15s ease;
+  }
+
+  &:checked::after {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  &:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.25);
+  }
 }

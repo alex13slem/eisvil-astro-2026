@@ -4,7 +4,13 @@ import { SelectServiceSection } from "@/widgets/select-service-section/server";
 ---
 
 <AppLayout title="Наши услуги">
-  <AppMain>
+  <AppMain class="main">
     <SelectServiceSection />
   </AppMain>
 </AppLayout>
+
+<style>
+  .main {
+    padding-block: 72px;
+  }
+</style>
