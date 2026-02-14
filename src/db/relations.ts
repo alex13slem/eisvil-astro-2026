@@ -1,5 +1,5 @@
 import { relations } from "drizzle-orm/relations";
-import { directusRoles, directusCollections, directusUsers, directusFiles, directusFolders, directusRevisions, directusActivity, directusVersions, directusSessions, directusShares, directusPolicies, directusPermissions, directusPresets, directusFlows, directusWebhooks, directusDashboards, directusPanels, directusNotifications, directusOperations, directusAccess, directusComments, directusSettings, platforms, gamePlatformLinks, games, gamesFiles, gameFeatures, socialNetworks, teamSocialNetworkLinks, team, settings, jobRoles, vacancies, publishingPage, developmentPage, gamesTeam1, settingsGames1 } from "./schema";
+import { directusRoles, directusCollections, directusUsers, directusFiles, directusFolders, directusRevisions, directusActivity, directusVersions, directusSessions, directusShares, directusPolicies, directusPermissions, directusPresets, directusFlows, directusWebhooks, directusDashboards, directusPanels, directusNotifications, directusOperations, directusAccess, directusComments, directusSettings, games, platforms, gamePlatformLinks, gamesFiles, gameFeatures, socialNetworks, teamSocialNetworkLinks, team, jobRoles, vacancies, publishingPage, developmentPage, settings, gamesTeam1, settingsGames1, formDevelopmentOrderFiles, formDevelopmentOrder } from "./schema";
 
 export const directusRolesRelations = relations(directusRoles, ({one, many}) => ({
 	directusRole: one(directusRoles, {
@@ -57,7 +57,6 @@ export const directusFilesRelations = relations(directusFiles, ({one, many}) => 
 	directusSettings_publicFavicon: many(directusSettings, {
 		relationName: "directusSettings_publicFavicon_directusFiles_id"
 	}),
-	gamesFiles: many(gamesFiles),
 	games_logo: many(games, {
 		relationName: "games_logo_directusFiles_id"
 	}),
@@ -70,12 +69,24 @@ export const directusFilesRelations = relations(directusFiles, ({one, many}) => 
 	games_fullBanner: many(games, {
 		relationName: "games_fullBanner_directusFiles_id"
 	}),
-	games_movingScenery: many(games, {
-		relationName: "games_movingScenery_directusFiles_id"
+	games_decorLeft: many(games, {
+		relationName: "games_decorLeft_directusFiles_id"
 	}),
+	games_decorTop: many(games, {
+		relationName: "games_decorTop_directusFiles_id"
+	}),
+	games_decorRight: many(games, {
+		relationName: "games_decorRight_directusFiles_id"
+	}),
+	games_decorBottom: many(games, {
+		relationName: "games_decorBottom_directusFiles_id"
+	}),
+	gamesFiles: many(gamesFiles),
 	gameFeatures: many(gameFeatures),
+	teams: many(team),
 	publishingPages: many(publishingPage),
 	developmentPages: many(developmentPage),
+	formDevelopmentOrderFiles: many(formDevelopmentOrderFiles),
 }));
 
 export const directusUsersRelations = relations(directusUsers, ({one, many}) => ({
@@ -121,7 +132,6 @@ export const directusUsersRelations = relations(directusUsers, ({one, many}) => 
 	games_userCreated: many(games, {
 		relationName: "games_userCreated_directusUsers_id"
 	}),
-	settings: many(settings),
 	teams_userUpdated: many(team, {
 		relationName: "team_userUpdated_directusUsers_id"
 	}),
@@ -136,6 +146,7 @@ export const directusUsersRelations = relations(directusUsers, ({one, many}) => 
 	}),
 	publishingPages: many(publishingPage),
 	developmentPages: many(developmentPage),
+	settings: many(settings),
 }));
 
 export const directusFoldersRelations = relations(directusFolders, ({one, many}) => ({
@@ -376,24 +387,7 @@ export const directusSettingsRelations = relations(directusSettings, ({one}) => 
 	}),
 }));
 
-export const gamePlatformLinksRelations = relations(gamePlatformLinks, ({one}) => ({
-	platform: one(platforms, {
-		fields: [gamePlatformLinks.platformId],
-		references: [platforms.id]
-	}),
-	game: one(games, {
-		fields: [gamePlatformLinks.gameId],
-		references: [games.id]
-	}),
-}));
-
-export const platformsRelations = relations(platforms, ({many}) => ({
-	gamePlatformLinks: many(gamePlatformLinks),
-}));
-
 export const gamesRelations = relations(games, ({one, many}) => ({
-	gamePlatformLinks: many(gamePlatformLinks),
-	gamesFiles: many(gamesFiles),
 	directusUser_userUpdated: one(directusUsers, {
 		fields: [games.userUpdated],
 		references: [directusUsers.id],
@@ -424,14 +418,46 @@ export const gamesRelations = relations(games, ({one, many}) => ({
 		references: [directusFiles.id],
 		relationName: "games_fullBanner_directusFiles_id"
 	}),
-	directusFile_movingScenery: one(directusFiles, {
-		fields: [games.movingScenery],
+	directusFile_decorLeft: one(directusFiles, {
+		fields: [games.decorLeft],
 		references: [directusFiles.id],
-		relationName: "games_movingScenery_directusFiles_id"
+		relationName: "games_decorLeft_directusFiles_id"
 	}),
+	directusFile_decorTop: one(directusFiles, {
+		fields: [games.decorTop],
+		references: [directusFiles.id],
+		relationName: "games_decorTop_directusFiles_id"
+	}),
+	directusFile_decorRight: one(directusFiles, {
+		fields: [games.decorRight],
+		references: [directusFiles.id],
+		relationName: "games_decorRight_directusFiles_id"
+	}),
+	directusFile_decorBottom: one(directusFiles, {
+		fields: [games.decorBottom],
+		references: [directusFiles.id],
+		relationName: "games_decorBottom_directusFiles_id"
+	}),
+	gamePlatformLinks: many(gamePlatformLinks),
+	gamesFiles: many(gamesFiles),
 	gameFeatures: many(gameFeatures),
 	gamesTeam1s: many(gamesTeam1),
 	settingsGames1s: many(settingsGames1),
+}));
+
+export const gamePlatformLinksRelations = relations(gamePlatformLinks, ({one}) => ({
+	platform: one(platforms, {
+		fields: [gamePlatformLinks.platformId],
+		references: [platforms.id]
+	}),
+	game: one(games, {
+		fields: [gamePlatformLinks.gameId],
+		references: [games.id]
+	}),
+}));
+
+export const platformsRelations = relations(platforms, ({many}) => ({
+	gamePlatformLinks: many(gamePlatformLinks),
 }));
 
 export const gamesFilesRelations = relations(gamesFiles, ({one}) => ({
@@ -487,15 +513,11 @@ export const teamRelations = relations(team, ({one, many}) => ({
 		fields: [team.roleId],
 		references: [jobRoles.id]
 	}),
-	gamesTeam1s: many(gamesTeam1),
-}));
-
-export const settingsRelations = relations(settings, ({one, many}) => ({
-	directusUser: one(directusUsers, {
-		fields: [settings.userUpdated],
-		references: [directusUsers.id]
+	directusFile: one(directusFiles, {
+		fields: [team.image],
+		references: [directusFiles.id]
 	}),
-	settingsGames1s: many(settingsGames1),
+	gamesTeam1s: many(gamesTeam1),
 }));
 
 export const jobRolesRelations = relations(jobRoles, ({many}) => ({
@@ -542,6 +564,14 @@ export const developmentPageRelations = relations(developmentPage, ({one}) => ({
 	}),
 }));
 
+export const settingsRelations = relations(settings, ({one, many}) => ({
+	directusUser: one(directusUsers, {
+		fields: [settings.userUpdated],
+		references: [directusUsers.id]
+	}),
+	settingsGames1s: many(settingsGames1),
+}));
+
 export const gamesTeam1Relations = relations(gamesTeam1, ({one}) => ({
 	team: one(team, {
 		fields: [gamesTeam1.teamId],
@@ -562,4 +592,19 @@ export const settingsGames1Relations = relations(settingsGames1, ({one}) => ({
 		fields: [settingsGames1.settingsId],
 		references: [settings.id]
 	}),
+}));
+
+export const formDevelopmentOrderFilesRelations = relations(formDevelopmentOrderFiles, ({one}) => ({
+	directusFile: one(directusFiles, {
+		fields: [formDevelopmentOrderFiles.directusFilesId],
+		references: [directusFiles.id]
+	}),
+	formDevelopmentOrder: one(formDevelopmentOrder, {
+		fields: [formDevelopmentOrderFiles.formDevelopmentOrderId],
+		references: [formDevelopmentOrder.id]
+	}),
+}));
+
+export const formDevelopmentOrderRelations = relations(formDevelopmentOrder, ({many}) => ({
+	formDevelopmentOrderFiles: many(formDevelopmentOrderFiles),
 }));

@@ -1,2 +1,1 @@
-export * from "./consts/slugs";
 export * from "./model/schema";

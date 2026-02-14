@@ -1,10 +1,11 @@
 const e = encodeURIComponent;
 
-export function buildShareLinks(opts: {
+export type BuildShareLinksOpts = {
   url: string;
-  text?: string;
   title?: string;
-}) {
+  text?: string;
+};
+export function buildShareLinks(opts: BuildShareLinksOpts) {
   const url = e(opts.url);
   const text = e(opts.text ?? "");
   const title = e(opts.title ?? "");

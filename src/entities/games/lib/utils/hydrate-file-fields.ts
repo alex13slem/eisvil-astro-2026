@@ -6,7 +6,10 @@ const FILE_FIELDS = [
   "bannerBg",
   "bannerFg",
   "fullBanner",
-  "movingScenery",
+  "decorBottom",
+  "decorLeft",
+  "decorRight",
+  "decorTop",
 ] as const satisfies readonly (keyof Game)[];
 
 export const hydrateGamesFileFields = <T extends Partial<Game>>(game: T) =>

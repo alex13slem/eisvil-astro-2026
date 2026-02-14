@@ -4,16 +4,14 @@ type FileFieldValue = string | null | undefined;
 
 export const hydrateFileFields = <
   T extends Record<string, unknown>,
-  K extends string
+  K extends string,
 >(
   collectionItem: T,
-  fileFields: readonly K[]
+  fileFields: readonly K[],
 ) => {
   const hydrated = { ...collectionItem } as Record<string, unknown>;
   for (const field of fileFields) {
-    if (!(field in hydrated)) {
-      continue;
-    }
+    if (!(field in hydrated)) continue;
     const id = hydrated[field] as FileFieldValue;
     hydrated[field] = toAssetUrl(id ?? null);
   }

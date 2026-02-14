@@ -650,6 +650,84 @@ export const directusPolicies = pgTable("directus_policies", {
 	appAccess: boolean("app_access").default(false).notNull(),
 });
 
+export const games = pgTable("games", {
+	id: uuid().primaryKey().notNull(),
+	userCreated: uuid("user_created"),
+	dateCreated: timestamp("date_created", { withTimezone: true, mode: 'string' }),
+	userUpdated: uuid("user_updated"),
+	dateUpdated: timestamp("date_updated", { withTimezone: true, mode: 'string' }),
+	name: varchar({ length: 255 }),
+	logo: uuid(),
+	bannerDescription: text("banner_description"),
+	description: text(),
+	shortPromoDescription: text("short_promo_description"),
+	bannerBg: uuid("banner_bg"),
+	bannerFg: uuid("banner_fg"),
+	fullBanner: uuid("full_banner"),
+	genre: varchar({ length: 255 }),
+	developer: varchar({ length: 255 }),
+	publisher: varchar({ length: 255 }),
+	releaseDate: date("release_date"),
+	slug: varchar({ length: 255 }).default(sql`NULL`),
+	siteUrl: varchar("site_url", { length: 255 }),
+	decorLeft: uuid("decor_left"),
+	decorTop: uuid("decor_top"),
+	decorRight: uuid("decor_right"),
+	decorBottom: uuid("decor_bottom"),
+}, (table) => [
+	foreignKey({
+			columns: [table.userUpdated],
+			foreignColumns: [directusUsers.id],
+			name: "games_user_updated_foreign"
+		}),
+	foreignKey({
+			columns: [table.userCreated],
+			foreignColumns: [directusUsers.id],
+			name: "games_user_created_foreign"
+		}),
+	foreignKey({
+			columns: [table.logo],
+			foreignColumns: [directusFiles.id],
+			name: "games_logo_foreign"
+		}).onDelete("set null"),
+	foreignKey({
+			columns: [table.bannerBg],
+			foreignColumns: [directusFiles.id],
+			name: "games_banner_bg_foreign"
+		}).onDelete("set null"),
+	foreignKey({
+			columns: [table.bannerFg],
+			foreignColumns: [directusFiles.id],
+			name: "games_banner_fg_foreign"
+		}).onDelete("set null"),
+	foreignKey({
+			columns: [table.fullBanner],
+			foreignColumns: [directusFiles.id],
+			name: "games_full_banner_foreign"
+		}).onDelete("set null"),
+	foreignKey({
+			columns: [table.decorLeft],
+			foreignColumns: [directusFiles.id],
+			name: "games_decor_left_foreign"
+		}).onDelete("set null"),
+	foreignKey({
+			columns: [table.decorTop],
+			foreignColumns: [directusFiles.id],
+			name: "games_decor_top_foreign"
+		}).onDelete("set null"),
+	foreignKey({
+			columns: [table.decorRight],
+			foreignColumns: [directusFiles.id],
+			name: "games_decor_right_foreign"
+		}).onDelete("set null"),
+	foreignKey({
+			columns: [table.decorBottom],
+			foreignColumns: [directusFiles.id],
+			name: "games_decor_bottom_foreign"
+		}).onDelete("set null"),
+	unique("games_slug_unique").on(table.slug),
+]);
+
 export const platforms = pgTable("platforms", {
 	id: serial().primaryKey().notNull(),
 	name: varchar({ length: 255 }),
@@ -691,65 +769,6 @@ export const gamesFiles = pgTable("games_files", {
 			foreignColumns: [games.id],
 			name: "games_files_games_id_foreign"
 		}).onDelete("set null"),
-]);
-
-export const games = pgTable("games", {
-	id: uuid().primaryKey().notNull(),
-	userCreated: uuid("user_created"),
-	dateCreated: timestamp("date_created", { withTimezone: true, mode: 'string' }),
-	userUpdated: uuid("user_updated"),
-	dateUpdated: timestamp("date_updated", { withTimezone: true, mode: 'string' }),
-	name: varchar({ length: 255 }),
-	logo: uuid(),
-	bannerDescription: text("banner_description"),
-	description: text(),
-	shortPromoDescription: text("short_promo_description"),
-	bannerBg: uuid("banner_bg"),
-	bannerFg: uuid("banner_fg"),
-	fullBanner: uuid("full_banner"),
-	genre: varchar({ length: 255 }),
-	developer: varchar({ length: 255 }),
-	publisher: varchar({ length: 255 }),
-	releaseDate: date("release_date"),
-	slug: varchar({ length: 255 }).default(sql`NULL`),
-	movingScenery: uuid("moving_scenery"),
-}, (table) => [
-	foreignKey({
-			columns: [table.userUpdated],
-			foreignColumns: [directusUsers.id],
-			name: "games_user_updated_foreign"
-		}),
-	foreignKey({
-			columns: [table.userCreated],
-			foreignColumns: [directusUsers.id],
-			name: "games_user_created_foreign"
-		}),
-	foreignKey({
-			columns: [table.logo],
-			foreignColumns: [directusFiles.id],
-			name: "games_logo_foreign"
-		}).onDelete("set null"),
-	foreignKey({
-			columns: [table.bannerBg],
-			foreignColumns: [directusFiles.id],
-			name: "games_banner_bg_foreign"
-		}).onDelete("set null"),
-	foreignKey({
-			columns: [table.bannerFg],
-			foreignColumns: [directusFiles.id],
-			name: "games_banner_fg_foreign"
-		}).onDelete("set null"),
-	foreignKey({
-			columns: [table.fullBanner],
-			foreignColumns: [directusFiles.id],
-			name: "games_full_banner_foreign"
-		}).onDelete("set null"),
-	foreignKey({
-			columns: [table.movingScenery],
-			foreignColumns: [directusFiles.id],
-			name: "games_moving_scenery_foreign"
-		}).onDelete("set null"),
-	unique("games_slug_unique").on(table.slug),
 ]);
 
 export const gameFeatures = pgTable("game_features", {
@@ -798,28 +817,6 @@ export const teamSocialNetworkLinks = pgTable("team_social_network_links", {
 		}).onDelete("cascade"),
 ]);
 
-export const settings = pgTable("settings", {
-	id: serial().primaryKey().notNull(),
-	userUpdated: uuid("user_updated"),
-	dateUpdated: timestamp("date_updated", { withTimezone: true, mode: 'string' }),
-	privacyPolicy: text("privacy_policy"),
-	termsOfService: text("terms_of_service"),
-}, (table) => [
-	foreignKey({
-			columns: [table.userUpdated],
-			foreignColumns: [directusUsers.id],
-			name: "settings_user_updated_foreign"
-		}),
-]);
-
-export const jobRoles = pgTable("job_roles", {
-	id: serial().primaryKey().notNull(),
-	name: varchar({ length: 255 }),
-	slug: varchar({ length: 255 }).default(sql`NULL`),
-}, (table) => [
-	unique("job_roles_slug_unique").on(table.slug),
-]);
-
 export const team = pgTable("team", {
 	id: uuid().primaryKey().notNull(),
 	userCreated: uuid("user_created"),
@@ -829,6 +826,7 @@ export const team = pgTable("team", {
 	name: varchar({ length: 255 }),
 	roleId: integer("role_id"),
 	description: text(),
+	image: uuid(),
 }, (table) => [
 	foreignKey({
 			columns: [table.userUpdated],
@@ -845,6 +843,19 @@ export const team = pgTable("team", {
 			foreignColumns: [jobRoles.id],
 			name: "team_role_id_foreign"
 		}).onDelete("set null"),
+	foreignKey({
+			columns: [table.image],
+			foreignColumns: [directusFiles.id],
+			name: "team_image_foreign"
+		}).onDelete("set null"),
+]);
+
+export const jobRoles = pgTable("job_roles", {
+	id: serial().primaryKey().notNull(),
+	name: varchar({ length: 255 }),
+	slug: varchar({ length: 255 }).default(sql`NULL`),
+}, (table) => [
+	unique("job_roles_slug_unique").on(table.slug),
 ]);
 
 export const vacancies = pgTable("vacancies", {
@@ -915,6 +926,23 @@ export const developmentPage = pgTable("development_page", {
 		}).onDelete("set null"),
 ]);
 
+export const settings = pgTable("settings", {
+	id: serial().primaryKey().notNull(),
+	userUpdated: uuid("user_updated"),
+	dateUpdated: timestamp("date_updated", { withTimezone: true, mode: 'string' }),
+	privacyPolicy: text("privacy_policy"),
+	termsOfService: text("terms_of_service"),
+	publishingSupportEmail: varchar("publishing_support_email", { length: 255 }),
+	developmentSupportEmail: varchar("development_support_email", { length: 255 }).default(sql`NULL`),
+	careerSupportEmail: varchar("career_support_email", { length: 255 }).default(sql`NULL`),
+}, (table) => [
+	foreignKey({
+			columns: [table.userUpdated],
+			foreignColumns: [directusUsers.id],
+			name: "settings_user_updated_foreign"
+		}),
+]);
+
 export const gamesTeam1 = pgTable("games_team_1", {
 	id: serial().primaryKey().notNull(),
 	gamesId: uuid("games_id"),
@@ -948,6 +976,50 @@ export const settingsGames1 = pgTable("settings_games_1", {
 			name: "settings_games_1_settings_id_foreign"
 		}).onDelete("set null"),
 ]);
+
+export const formCareer = pgTable("form_career", {
+	id: serial().primaryKey().notNull(),
+	dateCreated: timestamp("date_created", { withTimezone: true, mode: 'string' }),
+	fullName: varchar("full_name", { length: 255 }),
+	contact: varchar({ length: 255 }),
+	portfolioLink: varchar("portfolio_link", { length: 255 }),
+	coverLetter: text("cover_letter"),
+});
+
+export const formDevelopmentOrderFiles = pgTable("form_development_order_files", {
+	id: serial().primaryKey().notNull(),
+	formDevelopmentOrderId: integer("form_development_order_id"),
+	directusFilesId: uuid("directus_files_id"),
+}, (table) => [
+	foreignKey({
+			columns: [table.directusFilesId],
+			foreignColumns: [directusFiles.id],
+			name: "form_development_order_files_directus_files_id_foreign"
+		}).onDelete("set null"),
+	foreignKey({
+			columns: [table.formDevelopmentOrderId],
+			foreignColumns: [formDevelopmentOrder.id],
+			name: "form_development_order_files_form_developme__ab5abe8_foreign"
+		}).onDelete("set null"),
+]);
+
+export const formDevelopmentOrder = pgTable("form_development_order", {
+	id: serial().primaryKey().notNull(),
+	dateCreated: timestamp("date_created", { withTimezone: true, mode: 'string' }),
+	fullName: varchar("full_name", { length: 255 }),
+	companyName: varchar("company_name", { length: 255 }),
+	contact: varchar({ length: 255 }),
+	description: text(),
+});
+
+export const formPublishing = pgTable("form_publishing", {
+	id: serial().primaryKey().notNull(),
+	dateCreated: timestamp("date_created", { withTimezone: true, mode: 'string' }),
+	fullName: varchar("full_name", { length: 255 }),
+	contact: varchar({ length: 255 }),
+	buildLink: varchar("build_link", { length: 255 }),
+	description: text(),
+});
 export const geographyColumns = pgView("geography_columns", {	// TODO: failed to parse database type 'name'
 	fTableCatalog: varchar("f_table_catalog", { length: 63 }),
 	fTableSchema: varchar("f_table_schema", { length: 63 }),

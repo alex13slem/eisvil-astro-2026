@@ -5,7 +5,7 @@ import {
   platforms,
   settingsGames1,
 } from "@/db/schema";
-import { hydrateGamesFileFields } from "@/entities/games";
+import { hydrateGamesFileFields } from "@/entities/games/server";
 import type { PlatformSlug } from "@/entities/platforms";
 import { eq, inArray } from "drizzle-orm";
 import { type Top3Game, Top3GameSchema } from "../model/top-3-game.schema";
@@ -62,7 +62,7 @@ export default async function fetchTop3Games(): Promise<Top3Game[]> {
   const top3GamesWithPlatforms = Array.from(gamesById.values());
 
   const { success, data, error } = await Top3GameSchema.array().safeParseAsync(
-    top3GamesWithPlatforms
+    top3GamesWithPlatforms,
   );
   if (!success) throw new Error(error.message);
 

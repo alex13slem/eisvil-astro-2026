@@ -1,11 +1,8 @@
+import { PlatformWithLinkSchema } from "@/entities/platforms/model/schema";
 import { z } from "astro:schema";
 
 export const GameSchema = z.object({
   id: z.string(),
-  userCreated: z.string(),
-  dateCreated: z.string(),
-  userUpdated: z.string(),
-  dateUpdated: z.string(),
   slug: z.string(),
   name: z.string(),
   logo: z.string(),
@@ -19,6 +16,12 @@ export const GameSchema = z.object({
   developer: z.string(),
   publisher: z.string(),
   releaseDate: z.string().nullable(),
-  movingScenery: z.string(),
+  siteUrl: z.string().nullable(),
+  decorLeft: z.string().nullable(),
+  decorTop: z.string().nullable(),
+  decorRight: z.string().nullable(),
+  decorBottom: z.string().nullable(),
+
+  platforms: z.array(PlatformWithLinkSchema),
 });
 export type Game = z.infer<typeof GameSchema>;
