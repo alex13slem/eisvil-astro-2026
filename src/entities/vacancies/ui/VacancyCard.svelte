@@ -42,12 +42,6 @@
 
 <style>
   .vacancy-card {
-    background: linear-gradient(
-      146deg,
-      rgba(33, 79, 132, 0.97) 4.95%,
-      rgba(26, 31, 40, 0.97) 97.73%
-    );
-
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -57,6 +51,11 @@
     transition: filter 0.3s ease-in-out;
 
     &.-is-landing {
+      background: linear-gradient(
+        146deg,
+        rgba(33, 79, 132, 0.97) 4.95%,
+        rgba(26, 31, 40, 0.97) 97.73%
+      );
       padding: 72px 82px;
       @media (width < 768px) {
         padding: 38px 1.5rem;
@@ -64,6 +63,11 @@
     }
 
     &.-is-detail {
+      background: linear-gradient(
+        146deg,
+        rgba(33, 79, 132, 0.6) 4.95%,
+        rgba(26, 31, 40, 0.6) 97.73%
+      );
       padding: 28px 32px;
       @media (width < 768px) {
         padding: 38px 1.5rem;
