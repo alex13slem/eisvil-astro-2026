@@ -4,12 +4,12 @@
     "types": ["astro/client"]
   },
   "include": [
+    ".astro/types.d.ts",
     "src/**/*.svelte",
     "src/**/*.d.ts"
   ],
   "exclude": [
     "dist",
-    "node_modules",
-    ".astro"
+    "node_modules"
   ]
 }

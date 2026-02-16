@@ -78,6 +78,9 @@
       --offset-x: 200px;
     }
 
+    :global(.swiper) {
+      overflow: visible !important;
+    }
     :global(.swiper-slide) {
       border-radius: 8px;
 
