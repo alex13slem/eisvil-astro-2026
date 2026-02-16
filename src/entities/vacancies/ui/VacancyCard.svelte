@@ -44,8 +44,8 @@
   .vacancy-card {
     background: linear-gradient(
       146deg,
-      rgba(33, 79, 132, 0.9) 4.95%,
-      rgba(26, 31, 40, 0.9) 97.73%
+      rgba(33, 79, 132, 0.97) 4.95%,
+      rgba(26, 31, 40, 0.97) 97.73%
     );
 
     display: flex;
