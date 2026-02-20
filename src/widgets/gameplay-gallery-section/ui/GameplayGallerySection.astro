@@ -15,10 +15,3 @@ const gallery = await fetchGameplayGallery(gameId);
 <section {...props}>
   <GameplayGallery images={gallery} client:load />
 </section>
-
-<style>
-  section {
-    z-index: 1;
-    position: relative;
-  }
-</style>

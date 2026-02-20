@@ -1,11 +1,7 @@
 <script lang="ts">
-  import {
-    PlatformsLinksBlock,
-    platformSlugToIcon,
-  } from "@/entities/platforms";
+  import { PlatformsLinksBlock } from "@/entities/platforms";
   import type { Top3Game } from "@/features/top-3-games";
   import { ArrowIcon } from "@/shared/ui";
-  import Icon from "@iconify/svelte";
   import { mediaQuery } from "@sveu/browser";
   import Parallax from "parallax-js";
   import { fade, fly } from "svelte/transition";
@@ -162,7 +158,7 @@
   .bg {
     z-index: -1;
     position: absolute;
-    top: 0;
+    top: -94px;
     left: 0;
     right: 0;
     width: 100%;
