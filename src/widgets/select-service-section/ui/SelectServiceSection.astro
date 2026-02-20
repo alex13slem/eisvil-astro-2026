@@ -13,17 +13,21 @@ const [publishingService, developmentService] = await fetchServices();
   import Parallax from "parallax-js";
   const isHoverDevice = window.matchMedia("(hover: hover) and (pointer: fine)");
   if (isHoverDevice.matches) {
-    new Parallax(document.querySelector("#services-section .scene")!, {
-      hoverOnly: true,
+    document.querySelectorAll("#services-section .scene").forEach((scene) => {
+      new Parallax(scene as HTMLElement, {
+        hoverOnly: true,
+      });
     });
   }
 </script>
 
 <section id="services-section">
   <div class="container">
-    <div class="scene">
+    <div class="scene _l">
       <Image data-depth="0.3" src={lbDecor} alt="" class="crystal _lb" />
       <Image data-depth="0.1" src={ltDecor} alt="" class="crystal _lt" />
+    </div>
+    <div class="scene _r">
       <Image data-depth="0.15" src={rtDecor} alt="" class="crystal _rt" />
     </div>
 
@@ -34,6 +38,7 @@ const [publishingService, developmentService] = await fetchServices();
           <Card
             image={page.image}
             description={page.description}
+            serviceType={idx === 0 ? "publishing" : "development"}
             title={idx === 0 ? "Публикация" : "Разработка"}
             link={idx === 0 ? `/services/publishing` : `/services/development`}
           />
@@ -60,9 +65,19 @@ const [publishingService, developmentService] = await fetchServices();
   }
 
   .scene {
+    pointer-events: none;
     z-index: 2;
     position: absolute;
     inset: 0;
+    width: 50%;
+
+    &._l {
+      right: auto;
+    }
+
+    &._r {
+      left: auto;
+    }
 
     @media (width < 1024px) {
       display: none;

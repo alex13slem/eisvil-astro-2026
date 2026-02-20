@@ -12,8 +12,12 @@
     PublishingCTAFormSchema,
     type PublishingCTAFormType,
   } from "../model/form.schema";
+  import { PUBLISHING_CTA_HEADER } from "../model/config";
 
-  let { onSuccess }: { onSuccess?: () => void } = $props();
+  let {
+    onSuccess,
+    showHeader = true,
+  }: { onSuccess?: () => void; showHeader?: boolean } = $props();
 
   let hasSubmitted = $state(false);
   let supportEmail = $state(DEFAULT_SUPPORT_EMAIL);
@@ -82,10 +86,12 @@
 </script>
 
 <form use:form onsubmit={() => (hasSubmitted = true)}>
-  <FormHeader
-    title="Заявка на издательство"
-    subtitle="Пришлите ссылку на сборку и короткое описание."
-  />
+  {#if showHeader}
+    <FormHeader
+      title={PUBLISHING_CTA_HEADER.title}
+      subtitle={PUBLISHING_CTA_HEADER.subtitle}
+    />
+  {/if}
   <div class="fields">
     {#each fields as field (field.name)}
       <InputGroup {...field} />

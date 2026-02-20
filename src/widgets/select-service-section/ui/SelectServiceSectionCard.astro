@@ -1,26 +1,31 @@
 ---
+import { ServiceCTATrigger, type ServiceCTAType } from "@/features/service-cta";
+
 interface Props {
   image: string;
   description: string;
   title: string;
   link: string;
+  serviceType: ServiceCTAType;
 }
 
-const { image, description, title, link } = Astro.props;
+const { image, description, title, link, serviceType } = Astro.props;
 ---
 
-<a href={link} class="card">
+<article class="card">
   <div class="_inner">
     <div class="_bg"><img src={image} alt={title} /></div>
 
     <div class="_content">
+      <a href={link}></a>
       <div class="_info">
         <h3 class="_title">{title}</h3>
         <p class="_description">{description}</p>
       </div>
 
       <footer>
-        <button class="cta --outline"
+        <ServiceCTATrigger initialType={serviceType} client:load />
+        <a href={link} class="cta --outline"
           >Узнать больше
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -33,16 +38,17 @@ const { image, description, title, link } = Astro.props;
               d="M20.1529 0.157252C20.3405 -0.0535119 20.6435 -0.052373 20.8294 0.160435L23.8615 3.63175C24.0473 3.84463 24.0459 4.18862 23.8587 4.39986L20.8014 7.84253C20.6138 8.05376 20.311 8.05227 20.1249 7.83935C19.9388 7.62635 19.9401 7.2825 20.1277 7.07125L22.3637 4.55157L0.476543 4.44972C0.212363 4.44848 -0.00102941 4.20435 3.73572e-06 3.90441C0.00109365 3.60446 0.216113 3.36217 0.48028 3.36334L22.3684 3.46625L20.1501 0.926417C19.9641 0.713415 19.9653 0.368504 20.1529 0.157252Z"
               fill="currentColor"></path>
           </svg>
-        </button>
+        </a>
       </footer>
     </div>
   </div>
-</a>
+</article>
 
 <style>
   .card {
     --rounded: 0.5rem;
     position: relative;
+    display: block;
 
     border-radius: var(--rounded);
 
@@ -63,7 +69,7 @@ const { image, description, title, link } = Astro.props;
           opacity: 1;
           transition: opacity 0.9s ease-in-out;
         }
-        & .cta {
+        & footer {
           opacity: 1;
           pointer-events: all;
           transition: opacity 0.9s ease-in-out;
@@ -116,6 +122,12 @@ const { image, description, title, link } = Astro.props;
       @media (hover: hover) {
         padding-top: calc(60px + 37px + 2rem);
       }
+
+      & > a {
+        position: absolute;
+        z-index: 1;
+        inset: 0;
+      }
     }
 
     & ._info {
@@ -162,16 +174,17 @@ const { image, description, title, link } = Astro.props;
     }
 
     footer {
+      position: relative;
+      z-index: 2;
       margin-top: auto;
       display: flex;
       justify-content: center;
+      gap: 1rem;
 
-      & .cta {
-        @media (hover: hover) {
-          pointer-events: none;
-          opacity: 0;
-          transition: opacity 0.3s ease-in-out;
-        }
+      @media (hover: hover) {
+        pointer-events: none;
+        opacity: 0;
+        transition: opacity 0.3s ease-in-out;
       }
     }
   }

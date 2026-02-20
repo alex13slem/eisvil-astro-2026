@@ -13,11 +13,15 @@
     DevelopmentOrderCTAFormSchema,
     type DevelopmentOrderCTAFormType,
   } from "../model/form.schema";
+  import { DEVELOPMENT_ORDER_CTA_HEADER } from "../model/config";
 
   const MAX_FILES = 3;
   const MAX_FILE_SIZE_BYTES = 10 * 1024 * 1024;
 
-  let { onSuccess }: { onSuccess?: () => void } = $props();
+  let {
+    onSuccess,
+    showHeader = true,
+  }: { onSuccess?: () => void; showHeader?: boolean } = $props();
 
   let hasSubmitted = $state(false);
   let selectedFiles = $state<File[]>([]);
@@ -171,10 +175,12 @@
 </script>
 
 <form use:form onsubmit={() => (hasSubmitted = true)}>
-  <FormHeader
-    title="Заявка на разработку"
-    subtitle="Опишите проект и приложите материалы, если есть."
-  />
+  {#if showHeader}
+    <FormHeader
+      title={DEVELOPMENT_ORDER_CTA_HEADER.title}
+      subtitle={DEVELOPMENT_ORDER_CTA_HEADER.subtitle}
+    />
+  {/if}
   <div class="fields">
     {#each fields as field (field.name)}
       <InputGroup {...field} />

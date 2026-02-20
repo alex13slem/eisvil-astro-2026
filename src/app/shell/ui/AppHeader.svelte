@@ -1,8 +1,8 @@
 <script lang="ts">
+  import { ServiceCTATrigger } from "@/features/service-cta";
   import logoPng from "@/shared/assets/logo.png";
   import { windowScroll } from "@sveu/browser";
   import { navLinks } from "../lib/nav-links";
-  import MobileMenu from "./MobileMenu.svelte";
 
   const { y } = windowScroll();
   let isHide = $state<boolean>(false);
@@ -35,9 +35,7 @@
         <a {href}>{name}</a>
       {/each}
     </nav>
-    <div class="mobile-menu">
-      <MobileMenu />
-    </div>
+    <div class="service-cta"><ServiceCTATrigger /></div>
   </div>
 </header>
 
@@ -69,6 +67,10 @@
       backdrop-filter: blur(4px);
       background-color: var(--color-neutral-800-50);
       transition: opacity ease-in-out 0.3s;
+    }
+
+    @media (width < 1024px) {
+      display: none;
     }
   }
 
@@ -106,10 +108,7 @@
     }
   }
 
-  .mobile-menu {
+  .service-cta {
     margin-left: auto;
-    @media (width >= 1024px) {
-      display: none;
-    }
   }
 </style>

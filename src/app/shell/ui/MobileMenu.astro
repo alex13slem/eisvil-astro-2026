@@ -1,0 +1,54 @@
+---
+import logoPng from "@/shared/assets/logo.png";
+import { Icon } from "astro-icon/components";
+---
+
+<nav>
+  <a class="tab" href="/services">
+    <Icon
+      class="icon"
+      name="material-symbols:important-devices-outline-rounded"
+    />
+    <span>Услуги</span>
+  </a>
+  <a class="tab" href="/">
+    <img src={logoPng.src} alt="logo" height={46} />
+  </a>
+  <a class="tab" href="/career">
+    <Icon class="icon" name="material-symbols:article-person-outline-rounded" />
+    <span>Карьера</span>
+  </a>
+</nav>
+
+<style>
+  nav {
+    position: sticky;
+    bottom: 0;
+    z-index: 2;
+
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem;
+
+    backdrop-filter: blur(4px);
+    background-color: var(--color-neutral-800-50);
+    border-top: thin solid rgba(255, 255, 255, 0.1);
+  }
+
+  .tab {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+
+    span {
+      font-size: 12px;
+    }
+  }
+
+  .icon {
+    font-size: 1.5rem;
+  }
+</style>
