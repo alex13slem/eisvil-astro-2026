@@ -35,6 +35,10 @@ import { Icon } from "astro-icon/components";
     backdrop-filter: blur(4px);
     background-color: var(--color-neutral-800-50);
     border-top: thin solid rgba(255, 255, 255, 0.1);
+
+    @media (width >= 1024px) {
+      display: none;
+    }
   }
 
   .tab {
