@@ -6,8 +6,7 @@ import {
   type ServicesSlug,
 } from "@/entities/services";
 import { fetchServices } from "@/entities/services/server";
-import { DevelopmentOrderCTATrigger } from "@/features/development-order-cta";
-import { PublishingCTATrigger } from "@/features/publishing-cta";
+import { ServiceCTATrigger } from "@/features/service-cta";
 import { MDSection } from "@/shared/ui";
 import type { GetStaticPaths } from "astro";
 
@@ -36,8 +35,7 @@ const { service } = Astro.props;
     <MDSection md={service.body} img={{ src: service.image, alt: title }} />
     <section id="cta-section" class="container">
       <div class="prose">
-        {slug === "development" && <DevelopmentOrderCTATrigger client:load />}
-        {slug === "publishing" && <PublishingCTATrigger client:load />}
+        <ServiceCTATrigger initialType={slug} client:load />
       </div>
     </section>
   </AppMain>
