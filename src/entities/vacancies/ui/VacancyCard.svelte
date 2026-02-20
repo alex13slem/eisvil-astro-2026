@@ -10,7 +10,8 @@
   }: { vacancy: Vacancy; idx: number; type: "landing" | "detail" } = $props();
 </script>
 
-<div
+<a
+  href="/career/{vacancy.id}"
   class="vacancy-card"
   class:-is-landing={type === "landing"}
   class:-is-detail={type === "detail"}
@@ -22,7 +23,7 @@
   <div class="image">
     <VacancyImage vacancyIdx={idx} />
   </div>
-  <a href="/career/{vacancy.id}" class="link"
+  <button class="link"
     >узнать больше
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -36,9 +37,9 @@
         fill="currentColor"
       ></path>
     </svg>
-  </a>
+  </button>
   <VacanciesSharedBlock />
-</div>
+</a>
 
 <style>
   .vacancy-card {

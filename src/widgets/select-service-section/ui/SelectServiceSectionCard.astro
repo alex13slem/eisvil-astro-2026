@@ -9,7 +9,7 @@ interface Props {
 const { image, description, title, link } = Astro.props;
 ---
 
-<article class="card">
+<a href={link} class="card">
   <div class="_inner">
     <div class="_bg"><img src={image} alt={title} /></div>
 
@@ -20,7 +20,7 @@ const { image, description, title, link } = Astro.props;
       </div>
 
       <footer>
-        <a href={link} class="cta --outline"
+        <button class="cta --outline"
           >Узнать больше
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -33,11 +33,11 @@ const { image, description, title, link } = Astro.props;
               d="M20.1529 0.157252C20.3405 -0.0535119 20.6435 -0.052373 20.8294 0.160435L23.8615 3.63175C24.0473 3.84463 24.0459 4.18862 23.8587 4.39986L20.8014 7.84253C20.6138 8.05376 20.311 8.05227 20.1249 7.83935C19.9388 7.62635 19.9401 7.2825 20.1277 7.07125L22.3637 4.55157L0.476543 4.44972C0.212363 4.44848 -0.00102941 4.20435 3.73572e-06 3.90441C0.00109365 3.60446 0.216113 3.36217 0.48028 3.36334L22.3684 3.46625L20.1501 0.926417C19.9641 0.713415 19.9653 0.368504 20.1529 0.157252Z"
               fill="currentColor"></path>
           </svg>
-        </a>
+        </button>
       </footer>
     </div>
   </div>
-</article>
+</a>
 
 <style>
   .card {
